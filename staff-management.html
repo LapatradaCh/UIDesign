@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIDesign - จัดการเจ้าหน้าที่ในหน่วยงาน</title>
+    <link rel="stylesheet" href="StaffManagement.css">
+    <link rel="stylesheet" href="reset-otp.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        *,
+        ::before,
+        ::after {
+            font-family: "Anuphan", sans-serif !important;
+        }
+
+        .material-icons,
+        [class*="material-icons"] {
+            font-family: 'Material Icons' !important;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 0;
+            transition: padding 0.2s ease;
+        }
+
+        .design-view {
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* ================= Responsive Scaling (เมื่อกด Response / หน้าจอเล็กลง) ================= */
+        /* ย่อขนาดตัวหนังสือและปุ่มทุกตัวตามความกว้างหน้าจอ */
+        html {
+            font-size: 16px;
+            transition: font-size 0.2s ease;
+        }
+
+        @media (max-width: 1024px) {
+            html {
+                font-size: 15px;
+            }
+
+            body {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 13.5px;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            button,
+            input,
+            select,
+            textarea {
+                font-size: clamp(10px, 2.8vw, 13px) !important;
+                padding-top: clamp(4px, 1.2vw, 8px) !important;
+                padding-bottom: clamp(4px, 1.2vw, 8px) !important;
+                padding-left: clamp(6px, 2vw, 12px) !important;
+                padding-right: clamp(6px, 2vw, 12px) !important;
+            }
+
+            .min-h-\[44px\] {
+                min-height: 38px !important;
+            }
+
+            .min-h-\[32px\] {
+                min-height: 28px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 12px;
+            }
+
+            body {
+                padding: 6px;
+            }
+
+            button,
+            input,
+            select,
+            textarea {
+                font-size: clamp(9px, 3.2vw, 11.5px) !important;
+                padding-top: clamp(3px, 1vw, 6px) !important;
+                padding-bottom: clamp(3px, 1vw, 6px) !important;
+                padding-left: clamp(5px, 1.8vw, 9px) !important;
+                padding-right: clamp(5px, 1.8vw, 9px) !important;
+            }
+
+            .min-h-\[44px\] {
+                min-height: 34px !important;
+            }
+
+            .min-h-\[32px\] {
+                min-height: 26px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            html {
+                font-size: 11px;
+            }
+
+            body {
+                padding: 4px;
+            }
+
+            button,
+            input,
+            select,
+            textarea {
+                font-size: 9.5px !important;
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= เมนูสลับดีไซน์ ================= -->
+    <div class="max-w-[1100px] mx-auto mb-6 flex justify-between items-center relative z-50 gap-2 flex-wrap sm:flex-nowrap">
+        <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 cursor-pointer">
+            <span class="material-icons text-emerald-700 text-sm" aria-hidden="true">phonelink_lock</span>
+            <span>ดูหน้าตั้งค่า OTP (8 Interactive Designs)</span>
+        </a>
+        <div class="relative" id="designDropdownContainer">
+            <button id="designMenuBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                aria-controls="designMenu" onclick="toggleDesignMenu(event)"
+                class="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-full text-xs font-bold text-slate-800 shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 cursor-pointer">
+                <span class="material-icons text-emerald-700 text-sm" aria-hidden="true">dashboard_customize</span>
+                <span id="currentDesignLabel">เลือกดีไซน์: สรุปดีไซน์ (Hybrid Custom)</span>
+                <span class="material-icons text-slate-600 text-sm" aria-hidden="true">expand_more</span>
+            </button>
+            <div id="designMenu" role="menu"
+                class="hidden absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 space-y-1 text-xs">
+                <div
+                    class="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                    รูปแบบการแสดงผล (ดีไซน์ที่ 1-6)</div>
+
+                <button onclick="switchDesign(1)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD1">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">grid_view</span> 1. ดีไซน์ต้นฉบับ</span>
+                    <span id="checkD1" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <button onclick="switchDesign(2)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD2">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">view_sidebar</span> 2. Split
+                        Master-Detail</span>
+                    <span id="checkD2" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <button onclick="switchDesign(3)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD3">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">table_chart</span> 3. Enterprise
+                        Table</span>
+                    <span id="checkD3" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <button onclick="switchDesign(4)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD4">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">style</span> 4. Modern Cards</span>
+                    <span id="checkD4" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <button onclick="switchDesign(5)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD5">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">view_kanban</span> 5. Kanban Board</span>
+                    <span id="checkD5" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <button onclick="switchDesign(6)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-700 hover:bg-slate-50"
+                    id="btnD6">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">blur_on</span> 6. Glassmorphism</span>
+                    <span id="checkD6" class="material-icons text-sm text-emerald-600 hidden">check</span>
+                </button>
+
+                <div class="pt-2 pb-1">
+                    <div class="border-t border-slate-200"></div>
+                </div>
+                <div class="px-3 py-1.5 text-[10px] font-extrabold text-emerald-600 uppercase tracking-wider">สรุปดีไซน์
+                </div>
+
+                <button onclick="switchDesign(7)"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-slate-900 bg-emerald-50"
+                    id="btnD7">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-emerald-600">auto_awesome</span> สรุปดีไซน์ (Hybrid
+                        Custom)</span>
+                    <span id="checkD7" class="material-icons text-sm text-emerald-600">check</span>
+                </button>
+
+                <div class="pt-2 pb-1">
+                    <div class="border-t border-slate-200"></div>
+                </div>
+                <a href="index.html"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-purple-600">phonelink_lock</span> ปลดล็อค OTP (8 Designs)</span>
+                    <span class="material-icons text-sm text-purple-600">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 1 (ต้นฉบับดั้งเดิม) ================= -->
+    <div id="design1Container" class="hidden">
+        <div class="container">
+            <div class="header">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap;">
+                    <div style="min-width: 0; flex: 1;">
+                        <h2 class="title text-truncate">จัดการเจ้าหน้าที่ในหน่วยงาน</h2>
+                        <p class="subtitle hide-mobile">กำหนดสิทธิ์, จัดการข้อมูลติดต่อ และอนุมัติสมาชิกใหม่ในหน่วยงาน
+                        </p>
+                    </div>
+                    <button class="btnSecondary btn-shrink" onclick="openModal('qrModal')">
+                        <i data-lucide="qr-code" style="width: 16px;"></i> <span class="hide-mobile-text">QR เชิญ</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="tabsContainer">
+                <button class="tab tabActive" onclick="switchTab('all')" id="tabAll">
+                    <span class="material-icons tabIcon">people</span> เจ้าหน้าที่ทั้งหมด
+                </button>
+                <button class="tab" onclick="switchTab('pending')" id="tabPending">
+                    <span class="material-icons tabIcon">pending_actions</span> รอพิจารณา <span class="badge"
+                        id="pendingBadge">0</span>
+                </button>
+            </div>
+
+            <div id="contentAll">
+                <div class="toolbar">
+                    <div class="toolbarLeft">
+                        <div class="searchBox">
+                            <i data-lucide="search" style="width: 16px; color: #9ca3af; flex-shrink: 0;"></i>
+                            <input type="text" placeholder="ค้นหาชื่อ หรือ เบอร์โทร..." class="searchInput"
+                                id="searchInput" oninput="handleSearch(this.value)">
+                        </div>
+                        <div class="filterGroup">
+                            <button class="filterBtn filterBtnActive"
+                                onclick="setRoleFilter('all', this)">ทั้งหมด</button>
+                            <button class="filterBtn" onclick="setRoleFilter('admin', this)">ผู้ดูแล</button>
+                            <button class="filterBtn" onclick="setRoleFilter('staff', this)">เจ้าหน้าที่</button>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div class="viewToggle">
+                            <button class="viewBtn viewBtnActive" onclick="setViewMode('grid', this)"><i
+                                    data-lucide="grid" style="width: 16px;"></i></button>
+                            <button class="viewBtn" onclick="setViewMode('list', this)"><i data-lucide="list"
+                                    style="width: 16px;"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="staffDisplayContainer"></div>
+            </div>
+
+            <div id="contentPending" style="display: none;">
+                <div class="grid" id="pendingDisplayContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 2 (Split Master-Detail) ================= -->
+    <div id="design2Container" class="design-view hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl p-4 md:p-8 shadow-sm">
+            <div class="flex items-center justify-between gap-4 pb-4 md:pb-6 border-b border-slate-100 flex-nowrap">
+                <div class="min-w-0 flex-1">
+                    <span
+                        class="hidden md:inline-block text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-1">Split
+                        Master-Detail</span>
+                    <h1 class="text-base sm:text-xl md:text-2xl font-black text-slate-900 truncate">
+                        จัดการเจ้าหน้าที่ในหน่วยงาน</h1>
+                </div>
+                <button onclick="openModal('qrModal')"
+                    class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-800 px-3 md:px-4 py-2 rounded-xl font-bold text-[10px] md:text-xs flex items-center gap-1.5">
+                    <span class="material-icons text-sm">qr_code</span> <span class="hidden sm:inline">QR เชิญ</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-4 md:mt-6">
+                <div class="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
+                    <button onclick="setD2Tab('staff')" id="d2TabStaff"
+                        class="flex-1 md:flex-none px-6 py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap">เจ้าหน้าที่ทั้งหมด</button>
+                    <button onclick="setD2Tab('pending')" id="d2TabPending"
+                        class="flex-1 md:flex-none px-6 py-2 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-700 transition-all whitespace-nowrap">คำขอใหม่
+                        <span id="d2PendingCount"
+                            class="ml-1 bg-amber-500 text-white px-1.5 py-0.5 rounded-md text-[10px]">0</span></button>
+                </div>
+                <div class="relative w-full md:w-64 shrink-0">
+                    <span class="material-icons absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+                    <input type="text" placeholder="ค้นหารายชื่อ..." oninput="handleSearch(this.value)"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-medium focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+                <div class="lg:col-span-5 bg-slate-50/70 border border-slate-200 rounded-2xl p-4 h-[300px] lg:h-[550px] overflow-y-auto hide-scrollbar space-y-2"
+                    id="d2ListPanel"></div>
+                <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-4 md:p-8 flex flex-col justify-between shadow-sm h-auto min-h-[300px] lg:h-[550px] overflow-y-auto"
+                    id="d2DetailPanel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 3 (Enterprise Table) ================= -->
+    <div id="design3Container" class="design-view hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl p-4 md:p-8 shadow-sm space-y-4 md:space-y-6">
+            <div class="flex items-center justify-between gap-4 pb-4 md:pb-6 border-b border-slate-100 flex-nowrap">
+                <div class="min-w-0 flex-1">
+                    <span
+                        class="hidden md:inline-block text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-1">Enterprise
+                        Table</span>
+                    <h1 class="text-base sm:text-xl md:text-2xl font-black text-slate-900 truncate">
+                        จัดการเจ้าหน้าที่ในหน่วยงาน</h1>
+                </div>
+                <button onclick="openModal('qrModal')"
+                    class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-800 px-3 md:px-4 py-2 rounded-xl font-bold text-[10px] md:text-xs flex items-center gap-1.5">
+                    <span class="material-icons text-sm">qr_code</span> <span class="hidden sm:inline">QR เชิญ</span>
+                </button>
+            </div>
+
+            <div
+                class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 p-2 md:p-4 rounded-2xl border border-slate-200">
+                <div
+                    class="flex bg-slate-200/60 p-1 rounded-xl w-full md:w-auto overflow-x-auto hide-scrollbar flex-nowrap">
+                    <button onclick="setD3Tab('all')" id="d3TabAll"
+                        class="whitespace-nowrap px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition-all">ทั้งหมด</button>
+                    <button onclick="setD3Tab('admin')" id="d3TabAdmin"
+                        class="whitespace-nowrap px-4 py-2 rounded-lg text-xs font-bold text-slate-600 transition-all">ผู้ดูแลระบบ</button>
+                    <button onclick="setD3Tab('staff')" id="d3TabStaff"
+                        class="whitespace-nowrap px-4 py-2 rounded-lg text-xs font-bold text-slate-600 transition-all">เจ้าหน้าที่</button>
+                    <button onclick="setD3Tab('pending')" id="d3TabPending"
+                        class="whitespace-nowrap px-4 py-2 rounded-lg text-xs font-bold text-slate-600 transition-all">รออนุมัติ
+                        <span id="d3PendingCount"
+                            class="ml-1 bg-amber-500 text-white px-1.5 py-0.5 rounded-md text-[10px]">0</span></button>
+                </div>
+                <div class="relative w-full md:w-80 shrink-0">
+                    <span class="material-icons absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+                    <input type="text" placeholder="ค้นหาในตาราง..." oninput="handleSearch(this.value)"
+                        class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-medium focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table class="w-full text-left text-xs divide-y divide-slate-100 whitespace-nowrap">
+                    <thead class="bg-slate-50 text-slate-500 uppercase tracking-wider font-bold" id="d3TableHead">
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 bg-white" id="d3TableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 4 (Modern Floating Cards) ================= -->
+    <div id="design4Container" class="design-view hidden">
+        <div class="bg-white border border-slate-200 rounded-3xl p-4 md:p-8 shadow-sm space-y-4 md:space-y-6">
+            <div class="flex items-center justify-between gap-4 pb-4 md:pb-6 border-b border-slate-100 flex-nowrap">
+                <div class="min-w-0 flex-1">
+                    <span
+                        class="hidden md:inline-block text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-1">Modern
+                        Cards</span>
+                    <h1 class="text-base sm:text-xl md:text-2xl font-black text-slate-900 truncate">
+                        จัดการเจ้าหน้าที่ในหน่วยงาน</h1>
+                </div>
+                <button onclick="openModal('qrModal')"
+                    class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-800 px-3 md:px-4 py-2 rounded-xl font-bold text-[10px] md:text-xs flex items-center gap-1.5">
+                    <span class="material-icons text-sm">qr_code</span> <span class="hidden sm:inline">QR เชิญ</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
+                    <button onclick="setD4Tab('staff')" id="d4TabStaff"
+                        class="flex-1 md:flex-none px-4 md:px-6 py-2 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition-all whitespace-nowrap">จัดการบุคลากร</button>
+                    <button onclick="setD4Tab('pending')" id="d4TabPending"
+                        class="flex-1 md:flex-none px-4 md:px-6 py-2 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-700 transition-all whitespace-nowrap">คำขอ
+                        <span id="d4PendingCount"
+                            class="ml-1 bg-amber-500 text-white px-1.5 py-0.5 rounded-md text-[10px]">0</span></button>
+                </div>
+                <div class="relative w-full md:w-64 shrink-0">
+                    <span class="material-icons absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+                    <input type="text" placeholder="ค้นหาการ์ด..." oninput="handleSearch(this.value)"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-medium focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="d4CardsGrid"></div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 5 (Kanban Board Style) ================= -->
+    <div id="design5Container" class="design-view hidden">
+        <div class="bg-slate-100 border border-slate-200 rounded-3xl p-4 md:p-6 shadow-inner md:h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-300 flex-nowrap">
+                <div class="min-w-0 flex-1">
+                    <span
+                        class="hidden md:inline-block text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full mb-1">Kanban
+                        Workflow</span>
+                    <h1 class="text-base sm:text-xl md:text-2xl font-black text-slate-800 truncate">
+                        จัดการเจ้าหน้าที่ในหน่วยงาน</h1>
+                </div>
+                <button onclick="openModal('qrModal')"
+                    class="shrink-0 bg-white hover:bg-slate-50 text-slate-800 px-3 md:px-4 py-2 rounded-xl font-bold text-[10px] md:text-xs flex items-center gap-1.5 shadow-sm">
+                    <span class="material-icons text-sm">qr_code</span> <span class="hidden sm:inline">QR เชิญ</span>
+                </button>
+            </div>
+
+            <div
+                class="flex-1 flex flex-col lg:flex-row gap-6 overflow-y-auto lg:overflow-x-auto lg:overflow-y-hidden pb-4 hide-scrollbar">
+                <div
+                    class="flex flex-col bg-slate-200/50 rounded-2xl w-full lg:w-[320px] shrink-0 p-4 border border-slate-200 h-auto lg:h-full max-h-[500px] lg:max-h-full">
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <h3 class="font-bold text-slate-700 flex items-center gap-2"><span
+                                class="w-2 h-2 rounded-full bg-indigo-500"></span> ผู้ดูแลระบบ</h3>
+                        <span class="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full"
+                            id="d5AdminCount">0</span>
+                    </div>
+                    <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar h-full" id="d5AdminCol"></div>
+                </div>
+
+                <div
+                    class="flex flex-col bg-slate-200/50 rounded-2xl w-full lg:w-[320px] shrink-0 p-4 border border-slate-200 h-auto lg:h-full max-h-[500px] lg:max-h-full">
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <h3 class="font-bold text-slate-700 flex items-center gap-2"><span
+                                class="w-2 h-2 rounded-full bg-emerald-500"></span> เจ้าหน้าที่</h3>
+                        <span class="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full"
+                            id="d5StaffCount">0</span>
+                    </div>
+                    <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar h-full" id="d5StaffCol"></div>
+                </div>
+
+                <div
+                    class="flex flex-col bg-amber-100/30 rounded-2xl w-full lg:w-[320px] shrink-0 p-4 border border-amber-200/50 h-auto lg:h-full max-h-[500px] lg:max-h-full">
+                    <div class="flex justify-between items-center mb-4 px-1">
+                        <h3 class="font-bold text-amber-700 flex items-center gap-2"><span
+                                class="w-2 h-2 rounded-full bg-amber-500"></span> รอพิจารณา</h3>
+                        <span class="bg-amber-200 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-full"
+                            id="d5PendingCount">0</span>
+                    </div>
+                    <div class="flex flex-col gap-3 overflow-y-auto hide-scrollbar h-full" id="d5PendingCol"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 6 (Glassmorphism) ================= -->
+    <div id="design6Container" class="design-view hidden relative">
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 rounded-3xl ">
+            <div class="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-white/60 blur-[80px] rounded-full"></div>
+            <div
+                class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-slate-400/30 blur-[60px] rounded-full">
+            </div>
+        </div>
+        <div class="relative z-10 p-4 md:p-10 min-h-[80vh]">
+            <div
+                class="flex items-center justify-between gap-4 mb-6 md:mb-10 bg-white/40 backdrop-blur-md border border-white/60 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex-nowrap">
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-lg sm:text-2xl md:text-3xl font-black text-slate-800 tracking-tight truncate">
+                        จัดการเจ้าหน้าที่ในหน่วยงาน</h1>
+                    <p class="hidden md:block text-xs md:text-sm font-medium text-slate-500 mt-1">Glassmorphism UI</p>
+                </div>
+                <button onclick="openModal('qrModal')"
+                    class="shrink-0 flex items-center gap-1 md:gap-2 bg-slate-800 text-white px-3 md:px-5 py-2 md:py-3 rounded-2xl font-bold text-[10px] md:text-xs hover:bg-slate-900 transition-colors shadow-lg shadow-slate-900/20">
+                    <span class="material-icons text-sm">qr_code_2</span> <span class="hidden sm:inline">QR Code
+                        เชิญ</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <div
+                    class="flex w-full md:w-auto gap-2 p-1.5 bg-white/30 backdrop-blur-md border border-white/50 rounded-2xl overflow-x-auto hide-scrollbar">
+                    <button onclick="setD6Tab('staff')" id="d6TabStaff"
+                        class="flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl text-xs font-bold bg-white/80 text-slate-900 shadow-sm transition-all whitespace-nowrap">บุคลากรทั้งหมด</button>
+                    <button onclick="setD6Tab('pending')" id="d6TabPending"
+                        class="flex-1 md:flex-none px-4 md:px-6 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all flex justify-center items-center gap-2 whitespace-nowrap">รออนุมัติ
+                        <span id="d6PendingCount"
+                            class="bg-slate-800 text-white px-2 py-0.5 rounded-full text-[10px]">0</span></button>
+                </div>
+                <div class="relative w-full md:w-80 shrink-0">
+                    <span class="material-icons absolute left-4 top-3 text-slate-400 text-sm">search</span>
+                    <input type="text" placeholder="ค้นหารายชื่อ..." oninput="handleSearch(this.value)"
+                        class="w-full bg-white/50 backdrop-blur-md border border-white/60 rounded-2xl pl-10 pr-4 py-2.5 text-xs font-medium focus:outline-none focus:bg-white/80 transition-all text-slate-800 placeholder-slate-400 shadow-sm">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="d6Grid"></div>
+        </div>
+    </div>
+
+    <!-- ================= DESIGN 7 (Hybrid Custom) ================= -->
+    <div id="design7Container" class="design-view"></div>
+
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" role="dialog" aria-modal="true" aria-labelledby="qrModalTitle"
+        style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1050; align-items: center; justify-content: center; padding: 16px;">
+        <div
+            style="background: white; border-radius: 16px; width: 100%; max-width: 500px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); box-sizing: border-box;">
+            <div
+                style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+                <h3 id="qrModalTitle" style="font-size: 18px; font-weight: 700; margin: 0; color: #1f2937;">QR Code
+                    เชิญเจ้าหน้าที่</h3>
+                <button type="button" aria-label="ปิดหน้าต่าง QR Code" onclick="closeModal('qrModal')"
+                    class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"
+                    style="background: none; border: none; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; border-radius: 999px;"><i
+                        data-lucide="x" style="width: 20px;" aria-hidden="true"></i></button>
+            </div>
+            <div style="padding: 24px; box-sizing: border-box;">
+                <div
+                    style="background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; text-align: center; width: 100%; max-width: 220px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; margin: 0 auto;">
+                    <div style="color: #047857; font-weight: 700; font-size: 15px; margin-bottom: 2px;">QR Code</div>
+                    <div style="color: #475569; font-size: 12px; margin-bottom: 12px;">เชิญเจ้าหน้าที่</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://traffy.in.th/join/lab2"
+                        alt="QR Code สำหรับสแกนเข้าร่วมหน่วยงาน"
+                        style="width: 100%; max-width: 150px; height: auto; display: block;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Staff Modal -->
+    <div id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle"
+        style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1050; align-items: center; justify-content: center; padding: 16px;">
+        <div
+            style="background: white; border-radius: 16px; width: 100%; max-width: 450px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); box-sizing: border-box;">
+            <div
+                style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+                <h3 id="editModalTitle" style="font-size: 18px; font-weight: 700; margin: 0; color: #1f2937;">
+                    แก้ไขข้อมูลเจ้าหน้าที่</h3>
+                <button type="button" aria-label="ปิดหน้าต่างแก้ไขข้อมูล" onclick="closeModal('editModal')"
+                    class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"
+                    style="background: none; border: none; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; border-radius: 999px;"><i
+                        data-lucide="x" style="width: 20px;" aria-hidden="true"></i></button>
+            </div>
+            <div style="padding: 24px; box-sizing: border-box; width: 100%;">
+                <div class="formGroup" style="margin-bottom: 16px; width: 100%;">
+                    <label for="editNameInput" class="label"
+                        style="color: #334155; display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">ชื่อ
+                        - นามสกุล</label>
+                    <input type="text"
+                        class="input focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700"
+                        id="editNameInput"
+                        style="width: 100%; padding: 10px 16px; border: 1.5px solid #94a3b8; border-radius: 999px; box-sizing: border-box; color: #0f172a;">
+                </div>
+                <div class="formGroup" style="margin-top: 16px; margin-bottom: 16px; width: 100%;">
+                    <label for="editPhoneInput" class="label"
+                        style="color: #334155; display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">เบอร์โทรศัพท์</label>
+                    <input type="text"
+                        class="input focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700"
+                        id="editPhoneInput"
+                        style="width: 100%; padding: 10px 16px; border: 1.5px solid #94a3b8; border-radius: 999px; box-sizing: border-box; color: #0f172a;">
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 24px; align-items: center;">
+                    <button type="button" onclick="closeModal('editModal')"
+                        class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"
+                        style="flex: 0.8; height: 48px; border-radius: 999px; background: white; border: 1.5px solid #94a3b8; font-weight: 700; color: #1e293b; cursor: pointer;">ยกเลิก</button>
+                    <button type="button" onclick="saveEditStaff()"
+                        class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-700"
+                        style="flex: 1.2; height: 48px; border-radius: 999px; background: #1d4ed8; border: none; font-weight: 700; color: white; cursor: pointer;">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Info Modal -->
+    <div id="pendingInfoModal" role="dialog" aria-modal="true" aria-labelledby="pendingInfoModalTitle"
+        style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1050; align-items: center; justify-content: center; padding: 16px;">
+        <div
+            style="background: white; border-radius: 16px; width: 100%; max-width: 400px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); box-sizing: border-box;">
+            <div
+                style="padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; position: relative;">
+                <h3 id="pendingInfoModalTitle" style="font-size: 16px; font-weight: 700; margin: 0; color: #1f2937;">
+                    รายละเอียดคำขอ</h3>
+                <button type="button" aria-label="ปิดหน้าต่างรายละเอียดคำขอ" onclick="closeModal('pendingInfoModal')"
+                    class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"
+                    style="position: absolute; right: 20px; background: none; border: none; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 36px; min-height: 36px; border-radius: 999px;"><i
+                        data-lucide="x" style="width: 20px;" aria-hidden="true"></i></button>
+            </div>
+            <div style="padding: 24px; box-sizing: border-box;">
+                <div
+                    style="background: #f8f9fa; border-radius: 16px; padding: 16px; border: 1px solid #e5e7eb; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <i data-lucide="user" style="width: 16px; color: #334155;" aria-hidden="true"></i>
+                        <span style="color: #475569; font-size: 14px; width: 60px;">ชื่อ-สกุล</span>
+                        <span style="color: #0f172a; font-weight: 700; font-size: 14px;" id="infoName">-</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i data-lucide="phone" style="width: 16px; color: #334155;" aria-hidden="true"></i>
+                        <span style="color: #475569; font-size: 14px; width: 60px;">โทรศัพท์</span>
+                        <span style="color: #0f172a; font-weight: 700; font-size: 14px;" id="infoPhone">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ★ Responsibilities Modal ★ -->
+    <div id="responsibilitiesModal" role="dialog" aria-modal="true" aria-labelledby="respModalTitle"
+        style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1050; align-items: center; justify-content: center; padding: 16px;">
+        <div
+            style="background: white; border-radius: 16px; width: 100%; max-width: 550px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); box-sizing: border-box; display: flex; flex-direction: column; max-height: 85vh;">
+
+            <div
+                class="flex items-start justify-between relative shrink-0 border-b border-slate-100 p-4 sm:p-5 md:px-6 pb-3">
+                <div>
+                    <h3 id="respModalTitle" class="text-base sm:text-lg font-bold m-0 text-slate-900">
+                        เลือกประเภทที่รับผิดชอบ</h3>
+                    <p class="text-xs text-slate-500 m-0 mt-0.5" id="respModalSubtitle">เลือกหมวดหมู่ที่ต้องการมอบหมาย
+                        หรือกดไม่เลือกประเภท</p>
+                </div>
+                <button type="button" aria-label="ปิดหน้าต่างเปลี่ยนประเภทปัญหา" onclick="cancelResponsibilities()"
+                    class="bg-transparent border-none text-slate-700 hover:text-slate-900 cursor-pointer flex items-center justify-center p-1 rounded-full min-w-[36px] min-h-[36px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"><span
+                        class="material-icons text-[22px]" aria-hidden="true">close</span></button>
+            </div>
+
+            <!-- Top bar with 'ไม่เลือกประเภทที่รับผิดชอบ' and selection count -->
+            <div
+                class="px-4 sm:px-5 md:px-6 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 shrink-0 flex-wrap">
+                <button type="button" onclick="clearAllResp()" id="btnQuickNoResp"
+                    class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all border min-h-[32px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                    <span class="material-icons text-sm sm:text-base" id="iconQuickNoResp"
+                        aria-hidden="true">block</span>
+                    <span>ไม่เลือกประเภทที่รับผิดชอบ</span>
+                </button>
+                <span id="respCountBadge"
+                    class="text-xs sm:text-sm font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full">เลือกแล้ว
+                    0 / 37</span>
+            </div>
+
+            <div id="respListContainer"></div>
+
+            <div
+                class="flex border-t border-slate-200 shrink-0 p-3 sm:p-4 md:px-6 justify-between items-center gap-2 flex-wrap sm:flex-nowrap">
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <button type="button" onclick="selectAllResp()"
+                        class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm cursor-pointer px-3 py-1.5 rounded-full whitespace-nowrap border border-emerald-300 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 min-h-[36px]">เลือกทั้งหมด</button>
+                    <button type="button" onclick="clearAllResp()"
+                        class="bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 font-bold text-xs sm:text-sm cursor-pointer px-3 py-1.5 rounded-full whitespace-nowrap border border-slate-300 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700 min-h-[36px]">ไม่เลือกประเภท</button>
+                </div>
+                <div class="flex gap-2 sm:gap-3">
+                    <button type="button"
+                        class="px-4 py-2 sm:px-5 sm:py-2.5 bg-rose-700 hover:bg-rose-800 text-white rounded-full font-bold text-xs sm:text-sm cursor-pointer whitespace-nowrap border-none shadow-sm focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700 transition-colors min-h-[36px]"
+                        onclick="cancelResponsibilities()">ยกเลิก</button>
+                    <button type="button"
+                        class="px-4 py-2 sm:px-5 sm:py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full font-bold text-xs sm:text-sm cursor-pointer whitespace-nowrap border-none shadow-sm focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition-colors min-h-[36px]"
+                        onclick="saveResponsibilities()">บันทึกข้อมูล</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ★ View All Responsibilities Modal ★ -->
+    <div id="viewAllRespModal" role="dialog" aria-modal="true" aria-labelledby="viewAllRespModalTitle"
+        style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 1060; align-items: center; justify-content: center; padding: 16px;">
+        <div
+            style="background: white; border-radius: 16px; width: 100%; max-width: 500px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; max-height: 80vh;">
+            <div
+                style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                <h3 id="viewAllRespModalTitle" style="font-size: 18px; font-weight: 700; margin: 0; color: #1f2937;">
+                    ด้านความรับผิดชอบทั้งหมด</h3>
+                <button type="button" aria-label="ปิดหน้าต่างหมวดหมู่ทั้งหมด" onclick="closeModal('viewAllRespModal')"
+                    class="text-slate-700 hover:text-slate-900 rounded-full min-w-[36px] min-h-[36px] flex items-center justify-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"><span
+                        class="material-icons" aria-hidden="true">close</span></button>
+            </div>
+            <div style="padding: 24px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 8px;"
+                class="hide-scrollbar" id="viewAllRespContainer">
+                <!-- เนื้อหาจะถูกแทรกโดย JS -->
+            </div>
+            <div style="padding: 16px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end;">
+                <button type="button" onclick="closeModal('viewAllRespModal')"
+                    class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700"
+                    style="padding: 10px 24px; background-color: #f1f5f9; color: #1e293b; font-weight: 700; border-radius: 999px; font-size: 14px; border: 1.5px solid #cbd5e1; cursor:pointer; min-height: 40px;">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ★ Reset OTP Modal (การออกแบบระบบรีเซ็ตรหัส OTP) ★ -->
+    <div id="resetOtpModal" class="reset-otp-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="resetOtpModalTitle">
+        <div class="reset-otp-modal-container">
+            <!-- Modal Header -->
+            <div class="reset-otp-header">
+                <div class="flex items-center gap-3">
+                    <div class="reset-otp-header-icon">
+                        <span class="material-icons text-2xl" aria-hidden="true">lock_reset</span>
+                    </div>
+                    <div>
+                        <h3 id="resetOtpModalTitle" class="text-base sm:text-lg font-black text-slate-900 m-0 leading-tight">รีเซ็ตรหัสยืนยัน OTP</h3>
+                        <p class="text-xs text-slate-500 m-0 mt-0.5">ส่งรหัสยืนยันตัวตนใหม่ให้เจ้าหน้าที่ผ่าน SMS</p>
+                    </div>
+                </div>
+                <button type="button" aria-label="ปิดหน้าต่างรีเซ็ต OTP" onclick="closeResetOtpModal()" class="reset-otp-close-btn">
+                    <span class="material-icons text-lg" aria-hidden="true">close</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="reset-otp-body">
+                <!-- Staff Info Summary -->
+                <div class="reset-otp-staff-card">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold text-base flex items-center justify-center shrink-0 border border-emerald-200">
+                            <span class="material-icons text-xl" aria-hidden="true">person</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span id="resetOtpStaffName" class="text-sm font-black text-slate-900 truncate">สมชาย ใจดี</span>
+                                <span id="resetOtpStaffRole" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-800 border border-blue-200">ผู้ดูแลระบบ</span>
+                            </div>
+                            <span id="resetOtpStaffPhone" class="text-xs text-slate-500 font-mono">080-000-0001</span>
+                        </div>
+                    </div>
+                    <div id="resetOtpCurrentStatusBadge" class="shrink-0">
+                        <!-- สถานะ OTP ปัจจุบัน -->
+                    </div>
+                </div>
+
+                <!-- STEP 1: สาเหตุและระบุเบอร์ปลายทาง -->
+                <div id="otpStep1Container">
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">เลือกสาเหตุในการขอรีเซ็ต OTP</label>
+                        <div class="reset-otp-reason-grid">
+                            <button type="button" class="reset-otp-reason-pill active" data-reason="sms_not_received" onclick="selectOtpReason('sms_not_received')">
+                                <span class="material-icons text-base" aria-hidden="true">sms_failed</span>
+                                <span>ไม่ได้รับรหัส SMS</span>
+                            </button>
+                            <button type="button" class="reset-otp-reason-pill" data-reason="change_phone" onclick="selectOtpReason('change_phone')">
+                                <span class="material-icons text-base" aria-hidden="true">phonelink_setup</span>
+                                <span>เปลี่ยนเบอร์ / เครื่อง</span>
+                            </button>
+                            <button type="button" class="reset-otp-reason-pill" data-reason="locked_account" onclick="selectOtpReason('locked_account')">
+                                <span class="material-icons text-base" aria-hidden="true">lock_clock</span>
+                                <span>ปลดล็อก (กรอกผิดเกิน)</span>
+                            </button>
+                            <button type="button" class="reset-otp-reason-pill" data-reason="security_cycle" onclick="selectOtpReason('security_cycle')">
+                                <span class="material-icons text-base" aria-hidden="true">verified_user</span>
+                                <span>รอบความปลอดภัย</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="resetOtpPhoneInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">หมายเลขโทรศัพท์ปลายทาง (รับ SMS)</label>
+                        <div class="relative">
+                            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" aria-hidden="true">phone</span>
+                            <input type="tel" id="resetOtpPhoneInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition-all">
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-1">สามารถแก้ไขหมายเลขโทรศัพท์ได้ หากเจ้าหน้าที่เปลี่ยนเบอร์ใหม่</p>
+                    </div>
+
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 mb-2">
+                        <span class="material-icons text-amber-700 text-lg shrink-0 mt-0.5" aria-hidden="true">info</span>
+                        <p class="text-xs text-amber-900 m-0 leading-relaxed">
+                            <strong>คำเตือนความปลอดภัย:</strong> เมื่อกดยืนยัน รหัส OTP เดิมจะถูกระงับทันที และระบบจะส่งรหัสผ่าน 6 หลักใหม่ที่มีอายุ 5 นาทีไปยังเบอร์โทรศัพท์ที่ระบุ
+                        </p>
+                    </div>
+                </div>
+
+                <!-- STEP 2: ส่งรหัสเรียบร้อย & ทดสอบการยืนยันตัวตน -->
+                <div id="otpStep2Container" style="display: none;">
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex flex-col items-center text-center gap-2 mb-3">
+                        <div class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-md">
+                            <span class="material-icons text-2xl" aria-hidden="true">check</span>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-black text-emerald-950 m-0">ส่งรหัส OTP สำเร็จแล้ว!</h4>
+                            <p class="text-xs text-emerald-800 m-0 mt-0.5">
+                                รหัสถูกส่งไปยังหมายเลข <span id="otpSentTargetPhone" class="font-mono font-bold">080-xxx-xxxx</span>
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 mt-1 flex-wrap justify-center">
+                            <span class="px-2.5 py-1 bg-white rounded-lg border border-emerald-200 text-xs font-mono font-bold text-emerald-800">
+                                REF: <span id="otpSentRefCode">TK0000</span>
+                            </span>
+                            <span class="px-2.5 py-1 bg-amber-100 rounded-lg border border-amber-300 text-xs font-mono font-extrabold text-amber-950" title="รหัสจำลองสำหรับการทดสอบหน้าเว็บ">
+                                รหัสทดสอบ: <span id="otpSentDemoCode">000000</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- กล่องกรอกรหัส 6 หลัก (Interactive Demo) -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center mb-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-700">จำลองการกรอกรหัส 6 หลัก (เจ้าหน้าที่)</span>
+                            <button type="button" onclick="handleQuickFillOtp()" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 cursor-pointer underline flex items-center gap-0.5">
+                                <span class="material-icons text-sm" aria-hidden="true">auto_fix_high</span> กรอกรหัสทันที
+                            </button>
+                        </div>
+                        <div class="otp-input-group">
+                            <input type="text" maxlength="1" id="otpDigit0" oninput="handleOtpDigitInput(this, 0, event)" onkeydown="handleOtpDigitKeydown(this, 0, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 1">
+                            <input type="text" maxlength="1" id="otpDigit1" oninput="handleOtpDigitInput(this, 1, event)" onkeydown="handleOtpDigitKeydown(this, 1, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 2">
+                            <input type="text" maxlength="1" id="otpDigit2" oninput="handleOtpDigitInput(this, 2, event)" onkeydown="handleOtpDigitKeydown(this, 2, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 3">
+                            <input type="text" maxlength="1" id="otpDigit3" oninput="handleOtpDigitInput(this, 3, event)" onkeydown="handleOtpDigitKeydown(this, 3, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 4">
+                            <input type="text" maxlength="1" id="otpDigit4" oninput="handleOtpDigitInput(this, 4, event)" onkeydown="handleOtpDigitKeydown(this, 4, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 5">
+                            <input type="text" maxlength="1" id="otpDigit5" oninput="handleOtpDigitInput(this, 5, event)" onkeydown="handleOtpDigitKeydown(this, 5, event)" class="otp-digit-box" inputmode="numeric" pattern="[0-9]*" aria-label="หลักที่ 6">
+                        </div>
+                        <div id="otpVerifyResultMsg" class="min-h-[22px] text-xs font-bold mt-1"></div>
+
+                        <!-- Timer & Resend -->
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-3 mt-3">
+                            <span class="otp-timer-badge">
+                                <span class="material-icons text-sm" aria-hidden="true">timer</span>
+                                <span id="otpTimerBadgeText">ขอรหัสใหม่ได้ใน 01:00</span>
+                            </span>
+                            <button type="button" id="btnResendOtp" onclick="handleResendOtp()" disabled class="text-xs font-bold text-slate-700 px-3 py-1.5 rounded-full border border-slate-300 opacity-50 cursor-not-allowed transition-all">
+                                ขอส่งรหัสอีกครั้ง
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+                        <span>ประวัติการรีเซ็ต OTP ล่าสุด</span>
+                        <span class="text-[11px] text-slate-600 font-normal">เก็บบันทึกเพื่อความปลอดภัย</span>
+                    </h4>
+                    <div id="otpHistoryList" class="space-y-1.5">
+                        <!-- รายการประวัติ -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 px-6 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+                <button type="button" onclick="closeResetOtpModal()" class="px-5 py-2.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-full font-bold text-xs sm:text-sm cursor-pointer transition-colors min-h-[36px]">
+                    ปิดหน้าต่าง
+                </button>
+                <button type="button" id="btnConfirmSendOtp" onclick="handleSendOtpNow()" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full font-bold text-xs sm:text-sm cursor-pointer shadow-sm transition-colors flex items-center gap-1.5 min-h-[36px]">
+                    <span class="material-icons text-sm" aria-hidden="true">send</span>
+                    <span>ส่งรหัส OTP ทันที</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script สำหรับ Design 7 -->
+    <script src="design7.js"></script>
+    <!-- Script สำหรับ Reset OTP -->
+    <script src="reset-otp.js"></script>
+
+    <script>
+        // ================= Variables =================
+        let activeTab = 'all';
+        let viewMode = 'grid';
+        let roleFilter = 'all';
+        let searchTerm = '';
+        let activeDropdown = null;
+        let editingStaffId = null;
+
+        // 37 หมวดหมู่
+        const allCategories = [
+            'น้ำท่วม', 'ความสะอาด', 'ไฟฟ้า', 'ทางเท้า', 'ผิวเพิ่มประเภท', 'หาบเร่แผงลอย',
+            'ประปา', 'ถนน', 'ผิดกฎจราจร', 'ทุจริต', 'สัตว์', 'เสียง', 'โรงเรียน',
+            'ฝุ่นควัน&กลิ่น&PM2.5', 'คนเร่ร่อน', 'แท็กซี่/รถเมล์', 'ต้นไม้', 'ภัยออนไลน์',
+            'ขอความช่วยเหลือ', 'สุขภาพ & บัตรทอง', 'ผู้พิการ+ใช้ล้อ', 'อุบัติเหตุ',
+            'ควันดำ', 'สายสื่อสาร', 'ยาเสพติด', 'ป้าย', 'ขึ้นทะเบียน&สำรวจ',
+            'ขอใช้บริการ', 'คุ้มครองผู้บริโภค', 'สถานบันเทิง', 'ชื่นชม', 'บริจาค/ช่วยเหลือ',
+            'อื่นๆ', 'อาคารสถานที่', 'ความปลอดภัย', 'ทดสอบ category manualจ้า', 'ทักทดสอบแก้ไขประเภท'
+        ];
+
+        // ตัวแปรชั่วคราวสำหรับเก็บข้อมูลตอนที่กำลังแก้ไข แต่ยังไม่เซฟ
+        let selectedResp = [];
+
+        let staffList = [
+            { id: 1, name: 'สมชาย ใจดี', role: 'admin', phone: '080-000-0001', initial: 'ส', resp: [...allCategories], isAuthen: true },
+            { id: 2, name: 'สมหญิง รักสงบ', role: 'admin', phone: '080-000-0002', initial: 'ส', resp: ['ความสะอาด', 'ต้นไม้', 'ขยะ'], isAuthen: true },
+            { id: 3, name: 'มานะ ขยันเรียน', role: 'staff', phone: '080-000-0003', initial: 'ม', resp: ['น้ำท่วม'], isAuthen: true },
+            { id: 4, name: 'ปิติ รักไทย', role: 'staff', phone: '080-000-0004', initial: 'ป', resp: ['ไฟฟ้า', 'ประปา', 'สายสื่อสาร'], isAuthen: false },
+            { id: 6, name: 'วารี สายน้ำ', role: 'staff', phone: '081-234-5678', initial: 'ว', resp: ['ความสะอาด', 'หาบเร่แผงลอย'], isAuthen: false },
+            { id: 7, name: 'อาทิตย์ รุ่งเรือง', role: 'staff', phone: '089-876-5432', initial: 'อ', resp: ['ทุจริต', 'ความปลอดภัย'], isAuthen: true },
+            { id: 8, name: 'นภา เมฆสี', role: 'admin', phone: '086-111-2222', initial: 'น', resp: ['ไฟฟ้า', 'ถนน', 'ป้าย'], isAuthen: true }
+        ];
+
+        let pendingList = [
+            { id: 5, name: 'มิว ทดสอบ', phone: '080-999-9999', initial: 'ม', requestDate: '27 ส.ค. 09:15', requestRole: 'staff' },
+            { id: 9, name: 'ธนา พารวย', phone: '082-333-4444', initial: 'ธ', requestDate: '28 ส.ค. 10:30', requestRole: 'admin' },
+            { id: 10, name: 'ก้องเกียรติ ยิ่งใหญ่', phone: '083-555-6666', initial: 'ก', requestDate: '28 ส.ค. 11:45', requestRole: 'staff' }
+        ];
+
+        let currentDesign = 7;
+        let d2Tab = 'staff';
+        let selectedD2StaffId = 1;
+        let selectedD2PendingId = null;
+        let d3Tab = 'all';
+        let d4Tab = 'staff';
+        let d6Tab = 'staff';
+
+        // ================= Core Functions =================
+        function switchTab(tab) {
+            activeTab = tab;
+            document.getElementById('tabAll').className = tab === 'all' ? 'tab tabActive' : 'tab';
+            document.getElementById('tabPending').className = tab === 'pending' ? 'tab tabActive' : 'tab';
+            document.getElementById('contentAll').style.display = tab === 'all' ? 'block' : 'none';
+            document.getElementById('contentPending').style.display = tab === 'pending' ? 'block' : 'none';
+            render();
+        }
+
+        function setViewMode(mode, btn) {
+            viewMode = mode;
+            document.querySelectorAll('.viewBtn').forEach(b => b.classList.remove('viewBtnActive'));
+            btn.classList.add('viewBtnActive');
+            render();
+        }
+
+        function setRoleFilter(filter, btn) {
+            roleFilter = filter;
+            document.querySelectorAll('.filterBtn').forEach(b => b.classList.remove('filterBtnActive'));
+            btn.classList.add('filterBtnActive');
+            render();
+        }
+
+        function handleSearch(val) {
+            searchTerm = val;
+            render();
+        }
+
+        function toggleDropdown(id, event) {
+            event.stopPropagation();
+            activeDropdown = activeDropdown === id ? null : id;
+            render();
+        }
+
+        function handleToggleRole(id) {
+            staffList = staffList.map(s => s.id === id ? { ...s, role: s.role === 'admin' ? 'staff' : 'admin' } : s);
+            activeDropdown = null;
+            render();
+        }
+
+        function handleRemoveStaff(id) {
+            if (confirm('ยืนยันการลบออกจากหน่วยงาน?')) {
+                staffList = staffList.filter(s => s.id !== id);
+                activeDropdown = null;
+                if (typeof isD7EditMode !== 'undefined') isD7EditMode = false;
+                render();
+            }
+        }
+
+        function handleApprove(id) {
+            if (confirm('ยืนยันการอนุมัติคำขอเข้าหน่วยงาน?')) {
+                const item = pendingList.find(p => p.id === id);
+                if (item) {
+                    pendingList = pendingList.filter(p => p.id !== id);
+                    staffList.push({ ...item, role: item.requestRole || 'staff', resp: ['ไม่ได้ระบุ'], isAuthen: true });
+                    render();
+                }
+            }
+        }
+
+        function handleReject(id) {
+            if (confirm('ยืนยันการปฏิเสธคำขอเข้าหน่วยงาน?')) {
+                pendingList = pendingList.filter(p => p.id !== id);
+                render();
+            }
+        }
+
+        function showPendingInfo(name, phone) {
+            document.getElementById('infoName').innerText = name;
+            document.getElementById('infoPhone').innerText = phone;
+            openModal('pendingInfoModal');
+        }
+
+        function openEditModal(id) {
+            editingStaffId = id;
+            const staff = staffList.find(s => s.id === id);
+            if (staff) {
+                document.getElementById('editNameInput').value = staff.name;
+                document.getElementById('editPhoneInput').value = staff.phone;
+                openModal('editModal');
+            }
+            activeDropdown = null;
+        }
+
+        function saveEditStaff() {
+            const name = document.getElementById('editNameInput').value;
+            const phone = document.getElementById('editPhoneInput').value;
+
+            if (name.trim() === '' || phone.trim() === '') {
+                alert('❌ ข้อมูลไม่ครบถ้วน ไม่สามารถบันทึกได้');
+                return;
+            }
+
+            if (editingStaffId !== null) {
+                staffList = staffList.map(s => s.id === editingStaffId ? { ...s, name: name, phone: phone, initial: name.charAt(0) } : s);
+                alert('✅ บันทึกข้อมูลประวัติสำเร็จ');
+            }
+            closeModal('editModal');
+            render();
+        }
+
+        function openResponsibilitiesModal(id) {
+            editingStaffId = id;
+            const staff = staffList.find(s => s.id === id);
+
+            let rawResp = [];
+            if (typeof isD7EditMode !== 'undefined' && isD7EditMode && typeof d7TempResp !== 'undefined' && d7TempResp !== null) {
+                rawResp = d7TempResp;
+            } else if (staff && staff.resp) {
+                rawResp = staff.resp;
+            }
+            // กรองเฉพาะหมวดหมู่จริง
+            selectedResp = rawResp.filter(r => allCategories.includes(r));
+
+            activeDropdown = null;
+            renderRespList();
+            openModal('responsibilitiesModal');
+        }
+
+        function toggleResp(resp) {
+            selectedResp = selectedResp.includes(resp) ? selectedResp.filter(r => r !== resp) : [...selectedResp, resp];
+            renderRespList();
+        }
+
+        function selectAllResp() {
+            selectedResp = [...allCategories];
+            renderRespList();
+        }
+
+        function clearAllResp() {
+            selectedResp = [];
+            renderRespList();
+        }
+
+        function saveResponsibilities() {
+            if (typeof isD7EditMode !== 'undefined' && isD7EditMode) {
+                d7TempResp = [...selectedResp];
+                closeModal('responsibilitiesModal');
+                render();
+            } else {
+                if (editingStaffId !== null) {
+                    staffList = staffList.map(s => s.id === editingStaffId ? { ...s, resp: [...selectedResp] } : s);
+                    alert('✅ บันทึกประเภทความรับผิดชอบสำเร็จ');
+                }
+                closeModal('responsibilitiesModal');
+                render();
+            }
+        }
+
+        function cancelResponsibilities() {
+            closeModal('responsibilitiesModal');
+        }
+
+        function renderRespList() {
+            const countBadge = document.getElementById('respCountBadge');
+            const quickBtn = document.getElementById('btnQuickNoResp');
+            const quickIcon = document.getElementById('iconQuickNoResp');
+
+            const count = selectedResp.length;
+            if (countBadge) {
+                if (count === 0) {
+                    countBadge.innerHTML = '<span class="text-amber-800 font-bold">ไม่เลือกประเภท (0 หมวด)</span>';
+                } else {
+                    countBadge.innerHTML = 'เลือกแล้ว <span class="text-emerald-700 font-extrabold">' + count + '</span> / ' + allCategories.length + ' หมวด';
+                }
+            }
+
+            if (quickBtn) {
+                if (count === 0) {
+                    quickBtn.className = 'cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all border min-h-[32px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700 bg-amber-100 text-amber-900 border-amber-300 shadow-sm';
+                    if (quickIcon) {
+                        quickIcon.innerText = 'check_circle';
+                        quickIcon.className = 'material-icons text-sm sm:text-base text-amber-700';
+                    }
+                } else {
+                    quickBtn.className = 'cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all border min-h-[32px] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-700 bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+                    if (quickIcon) {
+                        quickIcon.innerText = 'block';
+                        quickIcon.className = 'material-icons text-sm sm:text-base text-slate-500';
+                    }
+                }
+            }
+
+            const container = document.getElementById('respListContainer');
+            container.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; padding: 16px; overflow-y: auto; max-height: 52vh; align-content: start;';
+
+            let html = '';
+            allCategories.forEach((resp) => {
+                const isSelected = selectedResp.includes(resp);
+                const borderColor = isSelected ? '#059669' : '#e2e8f0';
+                const bgColor = isSelected ? '#ecfdf5' : '#ffffff';
+                const textColor = isSelected ? '#065f46' : '#475569';
+                const iconBg = isSelected ? '#ffffff' : '#f8fafc';
+                const iconBorder = isSelected ? '#059669' : '#cbd5e1';
+                const iconColor = isSelected ? '#059669' : '#94a3b8';
+                const iconName = isSelected ? 'check' : 'widgets';
+
+                html += `<button type="button" aria-pressed="${isSelected}" onclick="toggleResp('${resp}')" class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 6px; border-radius: 18px; border: 1.5px solid ${borderColor}; background-color: ${bgColor}; cursor: pointer; min-height: 80px; box-sizing: border-box; transition: all 0.2s;" title="${resp}">`;
+                html += `<div style="width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid ${iconBorder}; background-color: ${iconBg}; margin-bottom: 6px; flex-shrink: 0;">`;
+                html += `<span class="material-icons" style="font-size: 16px; color: ${iconColor};" aria-hidden="true">${iconName}</span>`;
+                html += `</div>`;
+                html += `<span style="font-size: 11px; font-weight: 700; color: ${textColor}; text-align: center; line-height: 1.3; width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word;">${resp}</span>`;
+                html += `</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.showAllResp = function (id) {
+            const staff = staffList.find(s => s.id === id);
+            if (!staff || !staff.resp) return;
+
+            let modal = document.getElementById('dynamicViewAllModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'dynamicViewAllModal';
+                modal.style.cssText = "display: flex; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 16px;";
+                document.body.appendChild(modal);
+            } else {
+                modal.style.display = 'flex';
+            }
+
+            let chipsHtml = staff.resp.map(r =>
+                `<span style="padding: 8px 14px; background-color: #f8f9fa; border: 1px solid #e5e7eb; color: #4b5563; border-radius: 10px; font-size: 13px; font-weight: 700;">${r}</span>`
+            ).join('');
+
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 16px; width: 100%; max-width: 500px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; max-height: 80vh;">
+                    <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0; color: #1f2937;">ด้านความรับผิดชอบทั้งหมด (${staff.resp.length} หมวด)</h3>
+                        <button onclick="document.getElementById('dynamicViewAllModal').style.display='none'" style="background:none; border:none; cursor:pointer; color:#9ca3af; display:flex; align-items:center;"><span class="material-icons">close</span></button>
+                    </div>
+                    <div style="padding: 24px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 8px;" class="hide-scrollbar">
+                        ${chipsHtml}
+                    </div>
+                    <div style="padding: 16px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end;">
+                        <button onclick="document.getElementById('dynamicViewAllModal').style.display='none'" style="padding: 10px 24px; background-color: #f1f5f9; color: #334155; font-weight: 700; border-radius: 10px; font-size: 14px; border:none; cursor:pointer;">ปิดหน้าต่าง</button>
+                    </div>
+                </div>
+            `;
+        };
+
+        let activeOpenModalId = null;
+        let lastFocusedElementBeforeModal = null;
+
+        function copyText(text) { navigator.clipboard.writeText(text).then(() => alert('คัดลอกข้อมูลสำเร็จ: ' + text)); }
+
+        function openModal(modalId) {
+            lastFocusedElementBeforeModal = document.activeElement;
+            activeOpenModalId = modalId;
+            const el = document.getElementById(modalId);
+            if (el) {
+                el.style.display = 'flex';
+                setTimeout(() => {
+                    const focusables = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    if (focusables.length > 0) focusables[0].focus();
+                }, 60);
+            }
+        }
+
+        function closeModal(modalId) {
+            const el = document.getElementById(modalId);
+            if (el) el.style.display = 'none';
+            if (activeOpenModalId === modalId) {
+                activeOpenModalId = null;
+                if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+                    lastFocusedElementBeforeModal.focus();
+                }
+            }
+        }
+
+        // ================= Switcher Logic =================
+        function toggleDesignMenu(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('designMenu');
+            const isHidden = menu.classList.toggle('hidden');
+            const btn = document.getElementById('designMenuBtn');
+            if (btn) btn.setAttribute('aria-expanded', String(!isHidden));
+        }
+
+        // Global Keydown Handler for Escape and Focus Trap (WCAG 2.1.1, 2.1.2)
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                if (activeOpenModalId) {
+                    closeModal(activeOpenModalId);
+                }
+                const menu = document.getElementById('designMenu');
+                if (menu && !menu.classList.contains('hidden')) {
+                    menu.classList.add('hidden');
+                    const btn = document.getElementById('designMenuBtn');
+                    if (btn) {
+                        btn.setAttribute('aria-expanded', 'false');
+                        btn.focus();
+                    }
+                }
+            } else if (e.key === 'Tab' && activeOpenModalId) {
+                const el = document.getElementById(activeOpenModalId);
+                if (!el) return;
+                const focusables = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                if (focusables.length === 0) return;
+                const first = focusables[0];
+                const last = focusables[focusables.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else {
+                    if (document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            }
+        });
+        function switchDesign(num) {
+            currentDesign = num; document.getElementById('designMenu').classList.add('hidden');
+            for (let i = 1; i <= 7; i++) {
+                const container = document.getElementById('design' + i + 'Container');
+                const check = document.getElementById('checkD' + i);
+                const btn = document.getElementById('btnD' + i);
+
+                if (container) container.classList.toggle('hidden', i !== num);
+                if (check) check.classList.toggle('hidden', i !== num);
+                if (btn) {
+                    if (i === num) {
+                        btn.classList.remove('text-slate-700', 'hover:bg-slate-50');
+                        btn.classList.add('text-slate-900', 'bg-emerald-50');
+                    } else {
+                        btn.classList.add('text-slate-700', 'hover:bg-slate-50');
+                        btn.classList.remove('text-slate-900', 'bg-emerald-50');
+                    }
+                }
+            }
+            document.getElementById('currentDesignLabel').innerText = 'เลือกดีไซน์: สรุปดีไซน์';
+            render();
+        }
+
+        function setD2Tab(tab) { d2Tab = tab; render(); }
+        function setD3Tab(tab) { d3Tab = tab; render(); }
+        function setD4Tab(tab) { d4Tab = tab; render(); }
+        function setD6Tab(tab) { d6Tab = tab; render(); }
+
+        // ================= Main Render =================
+        function render() {
+            if (document.getElementById('pendingBadge')) document.getElementById('pendingBadge').innerText = pendingList.length;
+            if (document.getElementById('d2PendingCount')) document.getElementById('d2PendingCount').innerText = pendingList.length;
+            if (document.getElementById('d3PendingCount')) document.getElementById('d3PendingCount').innerText = pendingList.length;
+            if (document.getElementById('d4PendingCount')) document.getElementById('d4PendingCount').innerText = pendingList.length;
+            if (document.getElementById('d5PendingCount')) document.getElementById('d5PendingCount').innerText = pendingList.length;
+            if (document.getElementById('d6PendingCount')) document.getElementById('d6PendingCount').innerText = pendingList.length;
+            if (document.getElementById('d7PendingCount')) document.getElementById('d7PendingCount').innerText = pendingList.length;
+
+            const term = searchTerm.toLowerCase();
+            const filtered = staffList.filter(s => {
+                const matchesRole = roleFilter === 'all' || s.role === roleFilter;
+                const matchesSearch = s.name.toLowerCase().includes(term) || s.phone.includes(term);
+                return matchesRole && matchesSearch;
+            });
+            const pendingFiltered = pendingList.filter(p => p.name.toLowerCase().includes(term) || p.phone.includes(term));
+
+            // ----------- DESIGN 1 -----------
+            if (currentDesign === 1) {
+                const staffContainer = document.getElementById('staffDisplayContainer');
+                if (viewMode === 'grid') {
+                    let html = '<div class="grid">';
+                    filtered.forEach(staff => {
+                        let dropdownHtml = '';
+                        if (activeDropdown === staff.id) {
+                            dropdownHtml = '<div class="dropdownMenu">' +
+                                '<button class="dropdownItem" onclick="openEditModal(' + staff.id + ')"><i data-lucide="edit-3" style="width: 16px;"></i> แก้ไขข้อมูล</button>' +
+                                '<button class="dropdownItem" onclick="openResponsibilitiesModal(' + staff.id + ')"><i data-lucide="list-collapse" style="width: 16px;"></i> ด้านความรับผิดชอบ</button>' +
+                                '<button class="dropdownItem" onclick="handleToggleRole(' + staff.id + ')"><i data-lucide="' + (staff.role === 'admin' ? 'arrow-down' : 'arrow-up') + '" style="width: 16px;"></i> ' + (staff.role === 'admin' ? 'ลดสถานะ' : 'เพิ่มเป็นผู้ดูแล') + '</button>' +
+                                '<div class="dropdownDivider"></div>' +
+                                '<button class="dropdownItem dropdownItemDanger" onclick="handleRemoveStaff(' + staff.id + ')"><i data-lucide="user-x" style="width: 16px;"></i> ยกเลิกเป็นเจ้าหน้าที่</button>' +
+                                '</div>';
+                        }
+
+                        html += '<div class="card">' +
+                            '<div style="position: absolute; top: 16px; right: 16px; z-index: 40;">' +
+                            '<button class="moreBtn" style="position: static;" onclick="toggleDropdown(' + staff.id + ', event)"><i data-lucide="more-vertical" style="width: 16px;"></i></button>' +
+                            dropdownHtml +
+                            '</div>' +
+
+                            '<div class="name flex items-center justify-center gap-1">' + staff.name + (staff.isAuthen !== false ? ' <span class="material-icons text-emerald-700 align-middle" style="font-size: 16px;" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</div>' +
+                            '<div class="roleBadge ' + (staff.role === 'staff' ? 'roleBadgeStaff' : '') + '"><i data-lucide="' + (staff.role === 'admin' ? 'shield' : 'user') + '" style="width: 12px;" aria-hidden="true"></i> ' + (staff.role === 'admin' ? 'ผู้ดูแลระบบ' : 'เจ้าหน้าที่') + '</div>' +
+                            '<div class="contact"><div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="phone" style="width: 16px; color: #475569;" aria-hidden="true"></i> ' + staff.phone + '</div><button type="button" aria-label="คัดลอกเบอร์โทรศัพท์" class="copyBtn" style="min-width: 28px; min-height: 28px; display: inline-flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: #475569; border-radius: 4px;" onclick="copyText(\'' + staff.phone + '\')"><i data-lucide="copy" style="width: 16px;" aria-hidden="true"></i></button></div>' +
+                            '</div>';
+                    });
+                    html += '</div>';
+                    staffContainer.innerHTML = html;
+                } else {
+                    let html = '<div class="tableContainer"><table class="table"><thead><tr><th style="width: 35%;">ผู้ใช้งาน</th><th style="width: 25%;">บทบาท</th><th style="width: 25%;">เบอร์ติดต่อ</th><th style="width: 15%; text-align: right;">จัดการ</th></tr></thead><tbody>';
+                    filtered.forEach(staff => {
+                        let dropdownHtml = '';
+                        if (activeDropdown === staff.id) {
+                            dropdownHtml = '<div class="dropdownMenu" style="right: 0; top: 100%; margin-top: 4px; z-index: 9999;">' +
+                                '<button class="dropdownItem" onclick="openEditModal(' + staff.id + ')"><i data-lucide="edit-3" style="width: 16px;" aria-hidden="true"></i> แก้ไขข้อมูล</button>' +
+                                '<button class="dropdownItem" onclick="openResponsibilitiesModal(' + staff.id + ')"><i data-lucide="list-collapse" style="width: 16px;" aria-hidden="true"></i> ด้านความรับผิดชอบ</button>' +
+                                '<button class="dropdownItem" onclick="handleToggleRole(' + staff.id + ')"><i data-lucide="' + (staff.role === 'admin' ? 'arrow-down' : 'arrow-up') + '" style="width: 16px;" aria-hidden="true"></i> ' + (staff.role === 'admin' ? 'ลดสถานะ' : 'เพิ่มเป็นผู้ดูแล') + '</button>' +
+                                '<div class="dropdownDivider"></div>' +
+                                '<button class="dropdownItem dropdownItemDanger" onclick="handleRemoveStaff(' + staff.id + ')"><i data-lucide="user-x" style="width: 16px;" aria-hidden="true"></i> ยกเลิกเป็นเจ้าหน้าที่</button>' +
+                                '</div>';
+                        }
+
+                        html += '<tr>' +
+                            '<td><div class="userCell"><div class="avatarSmall ' + (staff.role === 'staff' ? 'avatarStaffSmall' : '') + '">' + staff.initial + '</div><span style="font-weight: 600; color: #0f172a; display: inline-flex; align-items: center; gap: 4px;">' + staff.name + (staff.isAuthen !== false ? ' <span class="material-icons text-emerald-700" style="font-size: 16px;" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</span></div></td>' +
+                            '<td><div class="roleBadge ' + (staff.role === 'staff' ? 'roleBadgeStaff' : '') + '" style="margin-bottom: 0;"><i data-lucide="' + (staff.role === 'admin' ? 'shield' : 'user') + '" style="width: 12px;" aria-hidden="true"></i> ' + (staff.role === 'admin' ? 'ผู้ดูแลระบบ' : 'เจ้าหน้าที่') + '</div></td>' +
+                            '<td style="white-space: nowrap;">' + staff.phone + '</td>' +
+                            '<td style="text-align: right; overflow: visible;">' +
+                            '<div style="position: relative; display: inline-block;">' +
+                            '<button type="button" aria-label="เมนูจัดการเจ้าหน้าที่ ' + staff.name + '" class="moreBtn" onclick="toggleDropdown(' + staff.id + ', event)">' +
+                            '<i data-lucide="more-vertical" style="width: 16px;" aria-hidden="true"></i>' +
+                            '</button>' +
+                            dropdownHtml +
+                            '</div>' +
+                            '</td>' +
+                            '</tr>';
+                    });
+                    html += '</tbody></table></div>';
+                    staffContainer.innerHTML = html;
+                }
+
+                const pendingContainer = document.getElementById('pendingDisplayContainer');
+                let pendingHtml = '';
+                pendingList.forEach(pending => {
+                    pendingHtml += '<div class="card" style="align-items: flex-start; padding: 20px;">' +
+                        '<div style="display: flex; align-items: center; gap: 4px; color: #9ca3af; font-size: 12px; margin-bottom: 12px;"><span class="material-icons" style="font-size: 14px;">schedule</span> ' + pending.requestDate + '</div>' +
+                        '<div class="userCell" style="margin-bottom: 8px;">' +
+
+                        '<div><div style="font-weight: 700; color: #1f2937; font-size: 16px;">' + pending.name + '</div><div class="pendingLabel">ขอเป็นเจ้าหน้าที่</div></div>' +
+                        '</div>' +
+                        '<div class="contact" style="margin: 12px 0;">' +
+                        '<div style="display: flex; align-items: center; gap: 8px;"><i data-lucide="phone" style="width: 16px; color: #9ca3af;"></i> ' + pending.phone + '</div>' +
+                        '<i data-lucide="copy" class="copyBtn" style="width: 14px; cursor: pointer;" onclick="copyText(\'' + pending.phone + '\')"></i>' +
+                        '</div>' +
+                        '<div class="pendingActions" style="width: 100%; display: flex; gap: 8px;">' +
+                        '<button class="btnApprove" onclick="handleApprove(' + pending.id + ')"><i data-lucide="check" style="width: 16px;"></i> อนุมัติ</button>' +
+                        '<button class="btnSecondary" style="flex: 1; justify-content: center; padding: 8px; background: white; font-weight: 600;" onclick="showPendingInfo(\'' + pending.name + '\', \'' + pending.phone + '\')">ข้อมูล</button>' +
+                        '<button class="btnReject" onclick="handleReject(' + pending.id + ')"><i data-lucide="x" style="width: 16px;"></i> ปฏิเสธ</button>' +
+                        '</div>' +
+                        '</div>';
+                });
+                pendingContainer.innerHTML = pendingHtml;
+            }
+
+            // ----------- DESIGN 2 -----------
+            if (currentDesign === 2) {
+                const listEl = document.getElementById('d2ListPanel');
+                const detailEl = document.getElementById('d2DetailPanel');
+                if (d2Tab === 'staff') {
+                    let listHtml = '';
+                    filtered.forEach(s => {
+                        const isSel = selectedD2StaffId === s.id;
+                        listHtml += '<div onclick="selectedD2StaffId=' + s.id + '; render();" class="p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ' + (isSel ? 'bg-slate-900 text-white border-slate-900 shadow-md' : 'bg-white border-slate-200 hover:border-slate-300 text-slate-900') + '">' +
+                            '<div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 shrink-0 rounded-xl font-bold flex items-center justify-center ' + (isSel ? 'bg-white/20' : 'bg-slate-100') + '">' + s.initial + '</div><div class="min-w-0"><p class="font-bold text-xs truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-xs ml-1" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</p><p class="text-[10px] ' + (isSel ? 'text-slate-300' : 'text-slate-500') + ' truncate">' + s.phone + '</p></div></div>' +
+                            '<span class="shrink-0 text-[10px] px-2 py-0.5 rounded-full font-bold ' + (isSel ? 'bg-white/20' : 'bg-slate-100') + '">' + (s.role === 'admin' ? 'ผู้ดูแล' : 'เจ้าหน้าที่') + '</span>' +
+                            '</div>';
+                    });
+                    listEl.innerHTML = listHtml || '<p class="text-xs text-center text-slate-500 mt-10">ไม่พบข้อมูล</p>';
+
+                    const s = staffList.find(x => x.id === selectedD2StaffId) || filtered[0];
+                    if (s) {
+                        detailEl.innerHTML = '<div class="space-y-6">' +
+                            '<div class="flex items-center gap-4 border-b border-slate-100 pb-6">' +
+                            '<div class="w-16 h-16 shrink-0 rounded-2xl bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center ">' + s.initial + '</div>' +
+                            '<div class="min-w-0"><h3 class="text-xl font-black text-slate-900 truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-lg ml-1.5" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</h3><p class="text-xs text-slate-500 mt-1">' + s.phone + '</p><span class="inline-block mt-1.5 bg-slate-100 text-slate-900 px-3 py-0.5 rounded-full text-[10px] font-bold">' + (s.role === 'admin' ? 'ผู้ดูแลระบบ' : 'เจ้าหน้าที่') + '</span></div>' +
+                            '</div>' +
+                            '<div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1">' +
+                            '<p class="text-[10px] font-bold uppercase text-slate-500">ด้านความรับผิดชอบ</p>' +
+                            '<p class="text-xs font-bold text-slate-800">' + (s.resp && s.resp.length > 0 ? s.resp.join(', ') : 'ไม่มี') + '</p>' +
+                            '</div>' +
+                            '<div class="flex flex-wrap gap-2 pt-2">' +
+                            '<button onclick="openEditModal(' + s.id + ')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-2 rounded-xl text-[11px] whitespace-nowrap"><span class="material-icons text-[14px] align-middle">edit</span> แก้ไข</button>' +
+                            '<button onclick="openResponsibilitiesModal(' + s.id + ')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-2 rounded-xl text-[11px] whitespace-nowrap"><span class="material-icons text-[14px] align-middle">task</span> หน้าที่</button>' +
+                            '<button onclick="handleToggleRole(' + s.id + ')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-2 rounded-xl text-[11px] whitespace-nowrap">' + (s.role === 'admin' ? 'ลดสถานะ' : 'เลื่อนขั้น') + '</button>' +
+                            '<button onclick="handleRemoveStaff(' + s.id + ')" class="shrink-0 p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl"><span class="material-icons text-[18px]">delete</span></button>' +
+                            '</div>' +
+                            '</div>';
+                    } else { detailEl.innerHTML = ''; }
+                } else {
+                    let listHtml = '';
+                    pendingFiltered.forEach(p => {
+                        const isSel = selectedD2PendingId === p.id;
+                        listHtml += '<div onclick="selectedD2PendingId=' + p.id + '; render();" class="p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ' + (isSel ? 'bg-amber-500 text-white border-amber-500 shadow-md' : 'bg-white border-slate-200 hover:border-slate-300 text-slate-900') + '">' +
+                            '<div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 shrink-0 rounded-xl font-bold flex items-center justify-center  ' + (isSel ? 'bg-white/20' : 'bg-amber-100 text-amber-700') + '">' + p.initial + '</div><div class="min-w-0"><p class="font-bold text-xs truncate">' + p.name + '</p><p class="text-[10px] ' + (isSel ? 'text-white/80' : 'text-slate-500') + ' truncate">' + p.requestDate + '</p></div></div>' +
+                            '</div>';
+                    });
+                    listEl.innerHTML = listHtml || '<p class="text-xs text-center text-slate-500 mt-10">ไม่มีคำขอ</p>';
+
+                    const p = pendingList.find(x => x.id === selectedD2PendingId) || pendingFiltered[0];
+                    if (p) {
+                        detailEl.innerHTML = '<div class="space-y-6">' +
+                            '<div class="flex items-center gap-4 border-b border-slate-100 pb-6">' +
+                            '<div class="w-16 h-16 shrink-0 rounded-2xl bg-amber-100 text-amber-700 font-black text-2xl flex items-center justify-center">' + p.initial + '</div>' +
+                            '<div class="min-w-0"><h3 class="text-xl font-black text-slate-900 truncate">' + p.name + '</h3><p class="text-xs text-slate-500 mt-1">' + p.phone + '</p><span class="inline-block mt-1.5 bg-amber-500 text-white px-3 py-0.5 rounded-full text-[10px] font-bold">คำขอเข้าร่วมหน่วยงาน</span></div>' +
+                            '</div>' +
+                            '<div class="flex gap-2 pt-4">' +
+                            '<button onclick="showPendingInfo(\'' + p.name + '\', \'' + p.phone + '\')" class="flex-1 bg-white border border-slate-300 text-slate-700 font-bold py-3 rounded-xl text-xs hover:bg-slate-50 whitespace-nowrap">ข้อมูล</button>' +
+                            '<button onclick="handleReject(' + p.id + ')" class="flex-1 bg-white border border-rose-200 text-rose-600 font-bold py-3 rounded-xl text-xs hover:bg-rose-50 whitespace-nowrap">ปฏิเสธ</button>' +
+                            '<button onclick="handleApprove(' + p.id + ')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs whitespace-nowrap">อนุมัติ</button>' +
+                            '</div>' +
+                            '</div>';
+                    } else { detailEl.innerHTML = ''; }
+                }
+            }
+
+            // ----------- DESIGN 3 -----------
+            if (currentDesign === 3) {
+                const head = document.getElementById('d3TableHead');
+                const tbody = document.getElementById('d3TableBody');
+                if (d3Tab === 'pending') {
+                    head.innerHTML = '<tr><th class="px-6 py-4 whitespace-nowrap">ผู้ส่งคำขอ</th><th class="px-6 py-4 whitespace-nowrap">เวลาที่ขอ</th><th class="px-6 py-4 whitespace-nowrap">เบอร์โทรศัพท์</th><th class="px-6 py-4 text-right whitespace-nowrap">พิจารณา</th></tr>';
+                    let tHtml = '';
+                    pendingFiltered.forEach(p => {
+                        tHtml += '<tr class="hover:bg-slate-50/80">' +
+                            '<td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 font-bold flex justify-center items-center">' + p.initial + '</div><span class="font-bold text-slate-900">' + p.name + '</span></div></td>' +
+                            '<td class="px-6 py-4 text-slate-500 whitespace-nowrap">' + p.requestDate + '</td><td class="px-6 py-4 font-mono text-slate-600 whitespace-nowrap">' + p.phone + '</td>' +
+                            '<td class="px-6 py-4 text-right whitespace-nowrap"><button onclick="handleApprove(' + p.id + ')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[10px] font-bold mr-1">อนุมัติ</button><button onclick="handleReject(' + p.id + ')" class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-[10px] font-bold">ปฏิเสธ</button></td>' +
+                            '</tr>';
+                    });
+                    tbody.innerHTML = tHtml || '<tr><td colspan="4" class="px-6 py-8 text-center text-xs text-slate-500">ไม่มีข้อมูล</td></tr>';
+                } else {
+                    head.innerHTML = '<tr><th class="px-6 py-4 whitespace-nowrap">บุคลากร</th><th class="px-6 py-4 whitespace-nowrap">บทบาทสิทธิ์</th><th class="px-6 py-4 text-right whitespace-nowrap">จัดการ</th></tr>';
+                    const d3Staffs = filtered.filter(s => d3Tab === 'all' || s.role === d3Tab);
+                    let tHtml = '';
+                    d3Staffs.forEach(s => {
+                        tHtml += '<tr class="hover:bg-slate-50/80">' +
+                            '<td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-800 font-bold flex items-center justify-center ">' + s.initial + '</div><div><div class="font-bold text-slate-900 flex items-center gap-1">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-xs" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</div><div class="text-[10px] text-slate-600">' + s.phone + '</div></div></div></td>' +
+                            '<td class="px-6 py-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ' + (s.role === 'admin' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700') + '">' + (s.role === 'admin' ? 'ผู้ดูแลระบบ' : 'เจ้าหน้าที่') + '</span></td>' +
+                            '<td class="px-6 py-4 text-right whitespace-nowrap"><div class="flex items-center justify-end gap-1"><button onclick="openEditModal(' + s.id + ')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg"><span class="material-icons text-[14px]">edit</span></button><button onclick="openResponsibilitiesModal(' + s.id + ')" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg"><span class="material-icons text-[14px]">task</span></button><button onclick="handleToggleRole(' + s.id + ')" class="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-lg"><span class="material-icons text-[14px]">swap_vert</span></button><button onclick="handleRemoveStaff(' + s.id + ')" class="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg"><span class="material-icons text-[14px]">delete</span></button></div></td>' +
+                            '</tr>';
+                    });
+                    tbody.innerHTML = tHtml || '<tr><td colspan="4" class="px-6 py-8 text-center text-xs text-slate-500">ไม่พบข้อมูล</td></tr>';
+                }
+            }
+
+            // ----------- DESIGN 4 -----------
+            if (currentDesign === 4) {
+                const gridEl = document.getElementById('d4CardsGrid');
+                if (d4Tab === 'staff') {
+                    let gHtml = '';
+                    filtered.forEach(s => {
+                        gHtml += '<div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow min-w-0">' +
+                            '<div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3 min-w-0"><div class="w-12 h-12 shrink-0 rounded-2xl bg-emerald-600 text-white font-extrabold text-lg flex items-center justify-center ">' + s.initial + '</div><div class="min-w-0"><h3 class="text-sm font-black text-slate-900 truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-sm ml-1" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</h3><p class="text-[10px] text-slate-500 font-mono mt-0.5 truncate">' + s.phone + '</p></div></div></div>' +
+                            '<div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100 mb-4 gap-2"><span class="px-2 py-0.5 shrink-0 rounded-full text-[10px] font-extrabold ' + (s.role === 'admin' ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-200 text-slate-700') + '">' + (s.role === 'admin' ? 'ผู้ดูแล' : 'เจ้าหน้าที่') + '</span><button onclick="openResponsibilitiesModal(' + s.id + ')" class="text-[10px] font-bold text-emerald-600 flex items-center gap-1 hover:underline truncate whitespace-nowrap"><span class="material-icons text-[12px]">settings</span> หน้าที่</button></div>' +
+                            '<div class="flex gap-1.5"><button onclick="openEditModal(' + s.id + ')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl flex justify-center text-[10px] font-bold whitespace-nowrap">แก้ไข</button><button onclick="handleToggleRole(' + s.id + ')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl flex justify-center text-[10px] font-bold whitespace-nowrap">สลับ</button><button onclick="handleRemoveStaff(' + s.id + ')" class="shrink-0 px-3 bg-rose-50 hover:bg-rose-100 py-2 rounded-xl flex justify-center"><span class="material-icons text-[14px] text-rose-600">delete</span></button></div>' +
+                            '</div>';
+                    });
+                    gridEl.innerHTML = gHtml || '<p class="col-span-full text-center text-xs text-slate-500 py-10">ไม่พบข้อมูล</p>';
+                } else {
+                    let gHtml = '';
+                    pendingFiltered.forEach(p => {
+                        gHtml += '<div class="bg-amber-50/50 border border-amber-200/50 rounded-3xl p-5 shadow-sm flex flex-col justify-between min-w-0">' +
+                            '<div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3 min-w-0"><div class="w-12 h-12 shrink-0 rounded-2xl bg-amber-100 text-amber-700 font-extrabold text-lg flex items-center justify-center ">' + p.initial + '</div><div class="min-w-0"><h3 class="text-sm font-black text-slate-900 truncate">' + p.name + '</h3><p class="text-[10px] text-slate-500 font-mono mt-0.5 truncate">' + p.phone + '</p></div></div></div>' +
+                            '<div class="bg-white p-2.5 rounded-xl border border-slate-100 mb-4 text-[10px] text-center font-bold text-slate-500 truncate">ส่งคำขอ: ' + p.requestDate + '</div>' +
+                            '<div class="flex gap-2"><button onclick="showPendingInfo(\'' + p.name + '\', \'' + p.phone + '\')" class="flex-1 bg-white border border-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs hover:bg-slate-50 whitespace-nowrap">ข้อมูล</button><button onclick="handleReject(' + p.id + ')" class="flex-1 bg-white border border-rose-200 text-rose-600 font-bold py-2 rounded-xl text-xs hover:bg-rose-50 whitespace-nowrap">ปฏิเสธ</button><button onclick="handleApprove(' + p.id + ')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs whitespace-nowrap">อนุมัติ</button></div>' +
+                            '</div>';
+                    });
+                    gridEl.innerHTML = gHtml || '<p class="col-span-full text-center text-xs text-slate-500 py-10">ไม่มีคำขอรออนุมัติ</p>';
+                }
+            }
+
+            // ----------- DESIGN 5 -----------
+            if (currentDesign === 5) {
+                const admins = filtered.filter(s => s.role === 'admin');
+                const staffs = filtered.filter(s => s.role === 'staff');
+
+                document.getElementById('d5AdminCount').innerText = admins.length;
+                document.getElementById('d5StaffCount').innerText = staffs.length;
+
+                let adminHtml = '';
+                admins.forEach(s => {
+                    adminHtml += '<div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all group min-w-0">' +
+                        '<div class="flex items-start justify-between">' +
+                        '<div class="flex items-center gap-2 min-w-0"><div class="w-8 h-8 shrink-0 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs ">' + s.initial + '</div><div class="min-w-0"><div class="text-xs font-bold text-slate-800 truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-xs ml-1" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</div><div class="text-[9px] text-slate-400 truncate">' + s.phone + '</div></div></div>' +
+                        '</div>' +
+                        '<div class="flex gap-1 mt-3 pt-3 border-t border-slate-100 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">' +
+                        '<button onclick="openEditModal(' + s.id + ')" class="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-800 bg-slate-50 py-1 rounded whitespace-nowrap">แก้ไข</button>' +
+                        '<button onclick="handleToggleRole(' + s.id + ')" class="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-800 bg-slate-50 py-1 rounded whitespace-nowrap">ลดขั้น</button>' +
+                        '<button onclick="handleRemoveStaff(' + s.id + ')" class="flex-1 text-[10px] font-bold text-rose-500 hover:text-rose-700 bg-rose-50 py-1 rounded whitespace-nowrap">ลบ</button>' +
+                        '</div>' +
+                        '</div>';
+                });
+                document.getElementById('d5AdminCol').innerHTML = adminHtml || '<div class="text-center text-xs text-slate-400 py-4 border-2 border-dashed border-slate-300 rounded-xl">ไม่มีข้อมูล</div>';
+
+                let staffHtml = '';
+                staffs.forEach(s => {
+                    staffHtml += '<div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all group min-w-0">' +
+                        '<div class="flex items-start justify-between">' +
+                        '<div class="flex items-center gap-2 min-w-0"><div class="w-8 h-8 shrink-0 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs ">' + s.initial + '</div><div class="min-w-0"><div class="text-xs font-bold text-slate-800 truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-xs ml-1" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</div><div class="text-[9px] text-slate-400 truncate">' + s.phone + '</div></div></div>' +
+                        '</div>' +
+                        '<div class="flex gap-1 mt-3 pt-3 border-t border-slate-100 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">' +
+                        '<button onclick="openEditModal(' + s.id + ')" class="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-800 bg-slate-50 py-1 rounded whitespace-nowrap">แก้ไข</button>' +
+                        '<button onclick="openResponsibilitiesModal(' + s.id + ')" class="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-800 bg-slate-50 py-1 rounded whitespace-nowrap">งาน</button>' +
+                        '<button onclick="handleToggleRole(' + s.id + ')" class="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-800 bg-slate-50 py-1 rounded whitespace-nowrap">เลื่อน</button>' +
+                        '<button onclick="handleRemoveStaff(' + s.id + ')" class="w-8 flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-rose-500 hover:text-rose-700 bg-rose-50 py-1 rounded"><span class="material-icons text-[14px]">delete</span></button>' +
+                        '</div>' +
+                        '</div>';
+                });
+                document.getElementById('d5StaffCol').innerHTML = staffHtml || '<div class="text-center text-xs text-slate-400 py-4 border-2 border-dashed border-slate-300 rounded-xl">ไม่มีข้อมูล</div>';
+
+                let penHtml = '';
+                pendingFiltered.forEach(p => {
+                    penHtml += '<div class="bg-white p-3 rounded-xl shadow-sm border border-amber-200 hover:shadow-md transition-all min-w-0">' +
+                        '<div class="flex items-start justify-between mb-2">' +
+                        '<div class="flex items-center gap-2 min-w-0"><div class="w-8 h-8 shrink-0 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs ">' + p.initial + '</div><div class="min-w-0"><div class="text-xs font-bold text-slate-800 truncate">' + p.name + '</div><div class="text-[9px] text-slate-400 truncate">' + p.requestDate + '</div></div></div>' +
+                        '</div>' +
+                        '<div class="flex gap-1 pt-2">' +
+                        '<button onclick="handleApprove(' + p.id + ')" class="flex-1 text-[10px] font-bold text-white bg-emerald-500 hover:bg-emerald-600 py-1.5 rounded whitespace-nowrap">อนุมัติ</button>' +
+                        '<button onclick="handleReject(' + p.id + ')" class="flex-1 text-[10px] font-bold text-rose-600 border border-rose-200 hover:bg-rose-50 py-1.5 rounded whitespace-nowrap">ปฏิเสธ</button>' +
+                        '</div>' +
+                        '</div>';
+                });
+                document.getElementById('d5PendingCol').innerHTML = penHtml || '<div class="text-center text-xs text-slate-400 py-4 border-2 border-dashed border-amber-200 rounded-xl">ไม่มีคำขอ</div>';
+            }
+
+            // ----------- DESIGN 6 -----------
+            if (currentDesign === 6) {
+                const gridEl = document.getElementById('d6Grid');
+                if (d6Tab === 'staff') {
+                    let html = '';
+                    filtered.forEach(s => {
+                        html += '<div class="bg-white/40 backdrop-blur-xl border border-white/60 p-5 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between hover:bg-white/50 transition-all min-w-0">' +
+                            '<div class="flex items-start justify-between mb-4">' +
+                            '<div class="flex items-center gap-4 min-w-0">' +
+                            '<div class="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-full bg-slate-800 text-white font-extrabold text-lg md:text-xl flex items-center justify-center shadow-md ">' + s.initial + '</div>' +
+                            '<div class="min-w-0">' +
+                            '<h3 class="text-xs md:text-sm font-black text-slate-800 truncate flex items-center">' + s.name + (s.isAuthen !== false ? ' <span class="material-icons text-emerald-700 text-sm ml-1" title="ผ่านการยืนยันตัวตนแล้ว" aria-label="ผ่านการยืนยันตัวตนแล้ว" role="img">verified</span>' : '') + '</h3>' +
+                            '<p class="text-[10px] text-slate-500 font-mono mt-0.5 tracking-wider truncate">' + s.phone + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="flex justify-between items-center bg-white/50 border border-white/60 p-3 rounded-2xl mb-5 gap-2">' +
+                            '<span class="shrink-0 px-3 py-1 rounded-full text-[10px] font-bold ' + (s.role === 'admin' ? 'bg-slate-800 text-white' : 'bg-slate-200 text-slate-700') + '">' + (s.role === 'admin' ? 'ผู้ดูแลระบบ' : 'เจ้าหน้าที่') + '</span>' +
+                            '<span class="text-[10px] font-bold text-slate-500 truncate">' + (s.resp && s.resp.length > 0 ? s.resp[0] + (s.resp.length > 1 ? ' (+' + (s.resp.length - 1) + ')' : '') : 'ไม่มีข้อมูล') + '</span>' +
+                            '</div>' +
+                            '<div class="flex gap-2">' +
+                            '<button onclick="openEditModal(' + s.id + ')" class="flex-1 bg-white/60 hover:bg-white text-slate-700 py-2.5 rounded-xl font-bold text-[10px] transition-colors border border-white flex justify-center items-center whitespace-nowrap" title="แก้ไข">แก้ไข</button>' +
+                            '<button onclick="openResponsibilitiesModal(' + s.id + ')" class="flex-1 bg-white/60 hover:bg-white text-slate-700 py-2.5 rounded-xl font-bold text-[10px] transition-colors border border-white flex justify-center items-center whitespace-nowrap" title="ความรับผิดชอบ">หน้าที่</button>' +
+                            '<button onclick="handleToggleRole(' + s.id + ')" class="flex-1 bg-white/60 hover:bg-white text-slate-700 py-2.5 rounded-xl font-bold text-[10px] transition-colors border border-white flex justify-center items-center whitespace-nowrap" title="สลับสิทธิ์">สลับ</button>' +
+                            '<button onclick="handleRemoveStaff(' + s.id + ')" class="shrink-0 px-3 bg-white/60 hover:bg-rose-50 text-rose-600 py-2.5 rounded-xl font-bold transition-colors border border-white flex justify-center items-center" title="ลบออกจากระบบ"><span class="material-icons text-[14px]">delete</span></button>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    gridEl.innerHTML = html || '<div class="col-span-full py-8 text-center text-slate-400 bg-white/30 backdrop-blur-md rounded-3xl border border-white/50">ไม่พบรายชื่อบุคลากร</div>';
+                } else {
+                    let html = '';
+                    pendingFiltered.forEach(p => {
+                        html += '<div class="bg-white/40 backdrop-blur-xl border border-white/60 p-5 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between hover:bg-white/50 transition-all min-w-0">' +
+                            '<div class="flex items-start justify-between mb-4">' +
+                            '<div class="flex items-center gap-4 min-w-0">' +
+                            '<div class="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-full bg-slate-300 text-slate-700 font-extrabold text-lg md:text-xl flex items-center justify-center shadow-md ">' + p.initial + '</div>' +
+                            '<div class="min-w-0">' +
+                            '<h3 class="text-xs md:text-sm font-black text-slate-800 truncate">' + p.name + '</h3>' +
+                            '<p class="text-[10px] text-slate-500 font-mono mt-0.5 tracking-wider truncate">' + p.phone + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="bg-white/50 border border-white/60 p-3 rounded-2xl mb-5 text-center truncate">' +
+                            '<span class="text-[10px] font-bold text-slate-600">ส่งคำขอเมื่อ: ' + p.requestDate + '</span>' +
+                            '</div>' +
+                            '<div class="flex gap-2">' +
+                            '<button onclick="showPendingInfo(\'' + p.name + '\', \'' + p.phone + '\')" class="flex-1 bg-white/60 hover:bg-white text-slate-700 border border-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm whitespace-nowrap">ข้อมูล</button>' +
+                            '<button onclick="handleReject(' + p.id + ')" class="flex-1 bg-white/60 hover:bg-white text-rose-600 border border-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm whitespace-nowrap">ปฏิเสธ</button>' +
+                            '<button onclick="handleApprove(' + p.id + ')" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm shadow-slate-800/20 whitespace-nowrap">อนุมัติ</button>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    gridEl.innerHTML = html || '<div class="col-span-full py-8 text-center text-slate-400 bg-white/30 backdrop-blur-md rounded-3xl border border-white/50">ไม่มีคำขอใหม่</div>';
+                }
+            }
+
+            // ----------- DESIGN 7 -----------
+            if (currentDesign === 7 && typeof renderDesign7 === 'function') {
+                renderDesign7(filtered, pendingFiltered, pendingList, staffList);
+            }
+
+            lucide.createIcons();
+        }
+
+        window.onclick = function (e) {
+            if (activeDropdown !== null) {
+                activeDropdown = null;
+                render();
+            }
+            if (!e.target.closest('#designDropdownContainer')) {
+                document.getElementById('designMenu').classList.add('hidden');
+            }
+        }
+
+        // Init
+        render();
+    </script>
+</body>
+
+</html>

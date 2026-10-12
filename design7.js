@@ -356,6 +356,33 @@ window.renderDesign7 = function(filtered, pendingFiltered, pendingList, staffLis
             detailHtml += '<div class="w-full">' + respHtml + '</div>';
             detailHtml += '</div>';
 
+            let otpBadgeText = isAuthen ? 'ยืนยันตัวตนแล้ว' : 'รอการยืนยัน OTP';
+            let otpBadgeColor = isAuthen 
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-300' 
+                : 'bg-amber-50 text-amber-900 border-amber-300';
+            let otpIcon = isAuthen ? 'verified_user' : 'phonelink_lock';
+
+            let otpCardHtml = '<div class="w-full p-3 sm:p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3 sm:mb-4 shrink-0">' +
+                '<div class="flex items-center gap-3 min-w-0">' +
+                '    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-200">' +
+                '        <span class="material-icons text-xl" aria-hidden="true">' + otpIcon + '</span>' +
+                '    </div>' +
+                '    <div class="min-w-0">' +
+                '        <div class="flex items-center gap-2 flex-wrap">' +
+                '            <span class="text-xs sm:text-sm font-black text-slate-900">รหัสยืนยัน OTP</span>' +
+                '            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold border ' + otpBadgeColor + '">' + otpBadgeText + '</span>' +
+                '        </div>' +
+                '        <p class="text-[11px] sm:text-xs text-slate-600 truncate mt-0.5">จัดการรหัสเข้าใช้งาน และส่ง SMS ยืนยันตัวตนใหม่</p>' +
+                '    </div>' +
+                '</div>' +
+                '<button type="button" aria-label="รีเซ็ตรหัส OTP เจ้าหน้าที่" onclick="openResetOtpModal(' + s.id + ')" class="cursor-pointer shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full text-xs sm:text-sm font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 w-full sm:w-auto min-h-[36px]">' +
+                '    <span class="material-icons text-base" aria-hidden="true">lock_reset</span>' +
+                '    <span>รีเซ็ต OTP</span>' +
+                '</button>' +
+                '</div>';
+
+            detailHtml += otpCardHtml;
+
             detailHtml += '<div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full mb-auto pb-1 shrink-0" role="region" aria-label="สถานะการเข้าใช้งาน">';
             detailHtml += statusCardsHtml;
             detailHtml += '</div>';
