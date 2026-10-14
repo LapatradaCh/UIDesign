@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตั้งค่า OTP - 8 Designs (Interactive & Responsive)</title>
+    <title>ตั้งค่า OTP - 9 Designs (Interactive & Responsive)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
@@ -44,6 +44,7 @@
         .status-badge, 
         .d4-filter-btn, 
         .quick-reason-btn,
+        .d9-pill,
         .badge-chip,
         .metric-title,
         .tag-pill,
@@ -53,7 +54,7 @@
         }
 
         /* 2. ทุกปุ่มมี interaction response ที่นุ่มนวลและตอบสนองทันทีเมื่อกด */
-        button, .tab-btn, .unlock-btn, .d4-filter-btn, .quick-reason-btn {
+        button, .tab-btn, .unlock-btn, .d4-filter-btn, .quick-reason-btn, .d9-pill {
             cursor: pointer;
             transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
             -webkit-tap-highlight-color: transparent;
@@ -63,7 +64,8 @@
         .tab-btn:active, 
         .unlock-btn:active, 
         .d4-filter-btn:active, 
-        .quick-reason-btn:active {
+        .quick-reason-btn:active,
+        .d9-pill:active {
             transform: scale(0.96) !important;
         }
 
@@ -152,12 +154,15 @@
             <div class="bg-white border border-slate-200 rounded-t-2xl p-4 shadow-sm z-10 flex-shrink-0">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900">ปลดล็อค OTP (8 Designs)</h1>
+                        <h1 class="text-xl font-bold text-slate-900">ปลดล็อค OTP (9 Designs)</h1>
                         <p class="text-sm text-slate-500 mt-1">ทดลองกดปุ่มปลดล็อค การตั้งค่าจะทำงานเชื่อมโยงกันทุกแท็บ</p>
                     </div>
                     <!-- Tabs Selection (Proper Initial Styles & Horizontal Scroll Support) -->
                     <div class="bg-slate-100 p-1.5 rounded-xl flex overflow-x-auto hide-scroll text-xs gap-1 max-w-full font-medium">
-                        <button onclick="switchDesign(1)" id="tab-1" class="tab-btn active flex-shrink-0 px-4 py-2 rounded-lg font-bold bg-white shadow-sm text-slate-900 whitespace-nowrap transition-colors cursor-pointer ring-1 ring-slate-200">1. Table</button>
+                        <button onclick="switchDesign(9)" id="tab-9" class="tab-btn active flex-shrink-0 px-4 py-2 rounded-lg font-bold bg-emerald-600 shadow-sm text-white whitespace-nowrap transition-colors cursor-pointer ring-1 ring-emerald-500 flex items-center gap-1.5">
+                            <span class="text-sm">🌟</span> 9. Smart Search & Feed (รวมจุดเด่น)
+                        </button>
+                        <button onclick="switchDesign(1)" id="tab-1" class="tab-btn flex-shrink-0 px-4 py-2 rounded-lg text-slate-500 hover:bg-slate-200 whitespace-nowrap transition-colors cursor-pointer">1. Table</button>
                         <button onclick="switchDesign(2)" id="tab-2" class="tab-btn flex-shrink-0 px-4 py-2 rounded-lg text-slate-500 hover:bg-slate-200 whitespace-nowrap transition-colors cursor-pointer">2. Search</button>
                         <button onclick="switchDesign(3)" id="tab-3" class="tab-btn flex-shrink-0 px-4 py-2 rounded-lg text-slate-500 hover:bg-slate-200 whitespace-nowrap transition-colors cursor-pointer">3. Split View</button>
                         <button onclick="switchDesign(4)" id="tab-4" class="tab-btn flex-shrink-0 px-4 py-2 rounded-lg text-blue-600 hover:bg-blue-50 whitespace-nowrap transition-colors cursor-pointer">4. Filter Grid ✨</button>
@@ -172,7 +177,7 @@
             <div class="bg-white border-x border-b border-slate-200 rounded-b-2xl shadow-sm flex-1 overflow-hidden relative flex flex-col">
                 
                 <!-- Design 1: Table (Responsive with overflow-x-auto) -->
-                <div id="design-1" class="design-panel p-4 sm:p-6 h-full flex-col active overflow-y-auto">
+                <div id="design-1" class="design-panel p-4 sm:p-6 h-full flex-col overflow-y-auto">
                     <div class="border border-slate-200 rounded-xl overflow-hidden flex-1 flex flex-col bg-white">
                         <div class="overflow-x-auto w-full">
                             <table class="min-w-full divide-y divide-slate-200">
@@ -664,6 +669,212 @@
                     </div>
                 </div>
 
+                <!-- Design 9: Smart Search & Security Grid (Unified: Filter Grid + Security Feed + Search) -->
+                <div id="design-9" class="design-panel p-4 sm:p-6 h-full flex-col bg-slate-50 overflow-y-auto active">
+                    <div class="max-w-6xl mx-auto w-full">
+
+                        <!-- Search & Quick Filters Toolbar -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 mb-4">
+                            <!-- Instant Live Search Bar -->
+                            <div class="relative flex-1 max-w-xl w-full">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="d9-search-input" oninput="filterD9()" placeholder="พิมพ์ค้นหาเบอร์โทร (เช่น 081-000-0001) หรือชื่อ..." class="w-full pl-10 pr-9 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-mono placeholder:font-sans placeholder-slate-400 text-slate-800 outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 shadow-sm transition-all">
+                                <button id="d9-search-clear" onclick="resetSearchD9()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Filter Chips (No scroll, 100% full width responsive grid on mobile) -->
+                            <div class="grid grid-cols-3 gap-1.5 w-full sm:w-auto sm:flex sm:items-center">
+                                <button onclick="setFilterCategoryD9('all')" id="d9-filter-all" class="d9-pill active w-full sm:w-auto px-1.5 sm:px-3.5 py-2 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-900 text-white shadow-sm transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center gap-1 text-center">
+                                    ทั้งหมด (3)
+                                </button>
+                                <button onclick="setFilterCategoryD9('locked')" id="d9-filter-locked" class="d9-pill w-full sm:w-auto px-1.5 sm:px-3.5 py-2 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center gap-1 text-center">
+                                    <span>⚠️ ถูกระงับ</span>
+                                    <span id="d9-filter-locked-count" class="bg-red-100 text-red-700 px-1.5 py-0.2 rounded-full text-[10px]">1</span>
+                                </button>
+                                <button onclick="setFilterCategoryD9('active')" id="d9-filter-active" class="d9-pill w-full sm:w-auto px-1.5 sm:px-3.5 py-2 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center gap-1 text-center">
+                                    <span>✅ บัญชีปกติ</span>
+                                    <span id="d9-filter-active-count" class="bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded-full text-[10px]">2</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card Grid Area (Responsive: 1 col on mobile, 2 cols on md, 3 cols on xl) -->
+                        <div id="d9-card-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+                            <!-- Card 1: นาย ก (Locked) -->
+                            <div id="d9-card-locked" class="d9-user-card bg-white rounded-2xl border-2 border-red-200 p-4 sm:p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-md" data-locked-phone="0810000001" data-phone="0810000001" data-name="นาย ก (สมมุติ)" data-status="locked">
+                                <div class="absolute top-0 left-0 right-0 h-1.5 bg-red-500 d9-card-accent transition-colors"></div>
+
+                                <div>
+                                    <!-- Header Row -->
+                                    <div class="flex items-center justify-between gap-2 mb-3 min-w-0">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-red-100 text-red-700 font-bold flex items-center justify-center text-base sm:text-lg shrink-0 d9-card-avatar transition-colors">
+                                                ก
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-tight whitespace-nowrap">นาย ก (สมมุติ)</h3>
+                                                <div class="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5 whitespace-nowrap">081-000-0001</div>
+                                            </div>
+                                        </div>
+                                        <span class="status-badge inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-red-100 text-red-700 border border-red-200 shrink-0 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span> ผิด 3/3 ครั้ง (ระงับ)
+                                        </span>
+                                    </div>
+
+                                    <!-- Security Metadata (จาก Security Feed) -->
+                                    <div class="bg-slate-50 rounded-xl p-2.5 text-xs text-slate-500 space-y-1 mb-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>🕒 เวลาที่เกิดเหตุ:</span>
+                                            <span class="font-semibold text-slate-700">14:20 น. (12 นาทีที่แล้ว)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>📱 ช่องทาง / เครื่อง:</span>
+                                            <span class="font-semibold text-slate-700">LINE LIFF (Android 14)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between font-mono text-[11px]">
+                                            <span>🌐 ไอพีแอดเดรส:</span>
+                                            <span class="text-slate-600">182.52.41.98</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Reason Callout -->
+                                    <div class="d9-reason-box text-xs text-red-700 font-medium bg-red-50 p-2.5 rounded-xl border border-red-100 leading-relaxed transition-all">
+                                        ⚠️ เหตุผล: กรอกรหัส OTP ไม่ถูกต้องเกิน 3 ครั้งติดต่อกัน ระบบล็อกเพื่อป้องกันการสวมรอย
+                                    </div>
+                                </div>
+
+                                <!-- Action Button: ปลดล็อคทันที (เด้ง Popup Modal ตรงนี้) -->
+                                <div class="mt-4 pt-3 border-t border-slate-100">
+                                    <button onclick="openUnlockModal('081-000-0001', 'นาย ก (สมมุติ)')" class="unlock-btn w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                                        <span>⚡ ปลดล็อคทันที</span>
+                                    </button>
+                                    <div class="d9-unlocked-state hidden text-center py-1">
+                                        <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl w-full justify-center">
+                                            <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                            ปลดล็อคสิทธิ์เรียบร้อยแล้ว
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: นาย ข (Active) -->
+                            <div class="d9-user-card bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-md" data-phone="0820000002" data-name="นาย ข (สมมุติ)" data-status="active">
+                                <div class="absolute top-0 left-0 right-0 h-1.5 bg-emerald-500"></div>
+
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 mb-3 min-w-0">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-base sm:text-lg shrink-0">
+                                                ข
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-tight whitespace-nowrap">นาย ข (สมมุติ)</h3>
+                                                <div class="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5 whitespace-nowrap">082-000-0002</div>
+                                            </div>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0 whitespace-nowrap">
+                                            ปกติ (Active)
+                                        </span>
+                                    </div>
+
+                                    <div class="bg-slate-50 rounded-xl p-2.5 text-xs text-slate-500 space-y-1 mb-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>🕒 เวลาที่เข้าสู่ระบบ:</span>
+                                            <span class="font-semibold text-slate-700">10:15 น.</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>💻 ช่องทาง / เครื่อง:</span>
+                                            <span class="font-semibold text-slate-700">Web Portal (Chrome Windows)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between font-mono text-[11px]">
+                                            <span>🌐 ไอพีแอดเดรส:</span>
+                                            <span class="text-slate-600">110.164.72.15</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-xs text-emerald-700 font-medium bg-emerald-50 p-2.5 rounded-xl border border-emerald-100 leading-relaxed">
+                                        ✓ เข้าสู่ระบบสำเร็จ (OTP ผ่านในครั้งแรก ไม่พบความผิดปกติ)
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+                                    <span class="text-xs font-medium text-slate-400">บัญชีใช้งานได้ปกติ ไม่มีความเสี่ยง</span>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: นางสาว ค (Active) -->
+                            <div class="d9-user-card bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm relative overflow-hidden flex flex-col justify-between transition-all hover:shadow-md" data-phone="0830000003" data-name="นางสาว ค (สมมุติ)" data-status="active">
+                                <div class="absolute top-0 left-0 right-0 h-1.5 bg-blue-500"></div>
+
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 mb-3 min-w-0">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base sm:text-lg shrink-0">
+                                                ค
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-tight whitespace-nowrap">นางสาว ค (สมมุติ)</h3>
+                                                <div class="font-mono text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5 whitespace-nowrap">083-000-0003</div>
+                                            </div>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-200 shrink-0 whitespace-nowrap">
+                                            ขอ OTP สำเร็จ
+                                        </span>
+                                    </div>
+
+                                    <div class="bg-slate-50 rounded-xl p-2.5 text-xs text-slate-500 space-y-1 mb-3">
+                                        <div class="flex items-center justify-between">
+                                            <span>🕒 เวลาที่ส่งข้อความ:</span>
+                                            <span class="font-semibold text-slate-700">09:30 น.</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span>📱 เกตเวย์ SMS:</span>
+                                            <span class="font-semibold text-slate-700">TH-AIS (OTP 6 หลัก)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between font-mono text-[11px]">
+                                            <span>🌐 ไอพีแอดเดรส:</span>
+                                            <span class="text-slate-600">171.96.18.204</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-xs text-blue-700 font-medium bg-blue-50 p-2.5 rounded-xl border border-blue-100 leading-relaxed">
+                                        ✓ ส่งรหัสยืนยัน 6 หลักเรียบร้อย ยืนยันตัวตนสำเร็จ
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+                                    <span class="text-xs font-medium text-slate-400">บัญชีใช้งานได้ปกติ ไม่มีความเสี่ยง</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Empty Search Result State -->
+                        <div id="d9-empty-state" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 mt-4">
+                            <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-base">ไม่พบข้อมูลที่ตรงกับคำค้นหา</h4>
+                            <p class="text-xs text-slate-500 mt-1">กรุณาตรวจสอบเบอร์โทรศัพท์หรือชื่อผู้ใช้งานใหม่อีกครั้ง</p>
+                            <button onclick="resetSearchD9()" class="mt-4 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer">
+                                ล้างการค้นหา
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -754,17 +965,25 @@
                 if([4,7,8].includes(parseInt(tab.id.replace('tab-','')))) {
                     tab.classList.add('text-blue-600', 'hover:bg-blue-50');
                 }
+                if(tab.id === 'tab-9') {
+                    tab.classList.add('text-emerald-700', 'hover:bg-emerald-50');
+                }
             });
             
             const activeTab = document.getElementById(`tab-${designNumber}`);
             if(activeTab) {
-                activeTab.className = 'tab-btn active flex-shrink-0 px-4 py-2 rounded-lg font-bold bg-white shadow-sm text-slate-900 whitespace-nowrap transition-colors cursor-pointer ring-1 ring-slate-200';
+                if(designNumber === 9) {
+                    activeTab.className = 'tab-btn active flex-shrink-0 px-4 py-2 rounded-lg font-bold bg-emerald-600 shadow-sm text-white whitespace-nowrap transition-colors cursor-pointer ring-1 ring-emerald-500 flex items-center gap-1.5';
+                } else {
+                    activeTab.className = 'tab-btn active flex-shrink-0 px-4 py-2 rounded-lg font-bold bg-white shadow-sm text-slate-900 whitespace-nowrap transition-colors cursor-pointer ring-1 ring-slate-200';
+                }
             }
             
             // Initialization triggers for responsive preview
             if(designNumber === 2) simulateSearchD2();
             if(designNumber === 3) selectUserD3('locked');
             if(designNumber === 7) simulateSearchD7();
+            if(designNumber === 9) filterD9();
         }
 
         // --- Interaction Logics ---
@@ -890,6 +1109,74 @@
         function closeDrawer() {
             document.getElementById('d8-drawer-overlay').classList.add('hidden');
             document.getElementById('d8-drawer').classList.add('translate-x-full');
+        }
+
+        // --- Logic Design 9 (Smart Search & Security Grid) ---
+        let d9ActiveCategory = 'all';
+
+        function filterD9() {
+            const input = document.getElementById('d9-search-input');
+            const clearBtn = document.getElementById('d9-search-clear');
+            const query = (input ? input.value.trim() : '').toLowerCase();
+            const cleanQuery = query.replace(/[-\s]/g, '');
+
+            if (clearBtn) {
+                if (query.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+            }
+
+            const cards = document.querySelectorAll('.d9-user-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name = (card.getAttribute('data-name') || '').toLowerCase();
+                const phone = (card.getAttribute('data-phone') || '').replace(/[-\s]/g, '');
+                const rawPhone = (card.querySelector('.font-mono')?.textContent || '').toLowerCase();
+                const status = card.getAttribute('data-status');
+
+                // Match category
+                const matchCategory = (d9ActiveCategory === 'all') || (d9ActiveCategory === status);
+
+                // Match query
+                const matchQuery = !query || name.includes(query) || phone.includes(cleanQuery) || rawPhone.includes(query);
+
+                if (matchCategory && matchQuery) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            const emptyState = document.getElementById('d9-empty-state');
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                }
+            }
+        }
+
+        function setFilterCategoryD9(category) {
+            d9ActiveCategory = category;
+            document.querySelectorAll('.d9-pill').forEach(btn => {
+                btn.className = 'd9-pill w-full sm:w-auto px-1.5 sm:px-3.5 py-2 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center gap-1 text-center';
+            });
+            const activePill = document.getElementById(`d9-filter-${category}`);
+            if (activePill) {
+                activePill.className = 'd9-pill active w-full sm:w-auto px-1.5 sm:px-3.5 py-2 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-slate-900 text-white shadow-sm transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center gap-1 text-center';
+            }
+            filterD9();
+        }
+
+        function resetSearchD9() {
+            const input = document.getElementById('d9-search-input');
+            if (input) input.value = '';
+            setFilterCategoryD9('all');
         }
 
         // --- Global Unlock Logic ---
@@ -1028,6 +1315,36 @@
                     d8Reason.className = 'font-medium text-slate-400 drawer-reason-text transition-colors';
                     d8Reason.textContent = '-';
                 }
+
+                // Design 9 (Smart Search & Security Grid Updates)
+                const d9Card = document.getElementById('d9-card-locked');
+                if (d9Card) {
+                    d9Card.classList.replace('border-red-200', 'border-slate-200');
+                    d9Card.setAttribute('data-status', 'active');
+                    const d9Bar = d9Card.querySelector('.d9-card-accent');
+                    if (d9Bar) d9Bar.className = 'absolute top-0 left-0 right-0 h-1.5 bg-emerald-500 d9-card-accent transition-colors';
+                    const d9Av = d9Card.querySelector('.d9-card-avatar');
+                    if (d9Av) d9Av.className = 'w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-lg shrink-0 d9-card-avatar transition-colors';
+                    const d9Reason = d9Card.querySelector('.d9-reason-box');
+                    if (d9Reason) {
+                        d9Reason.className = 'd9-reason-box text-xs text-emerald-700 font-medium bg-emerald-50 p-2.5 rounded-xl border border-emerald-100 leading-relaxed transition-all';
+                        d9Reason.textContent = '✓ ปลดล็อคสำเร็จ: แอดมินได้ทำการรีเซ็ตสิทธิ์และกู้คืนสถานะความปลอดภัยแล้ว';
+                    }
+                    const d9UnlockBtn = d9Card.querySelector('.unlock-btn');
+                    if (d9UnlockBtn) d9UnlockBtn.style.display = 'none';
+                    const d9UnlockedState = d9Card.querySelector('.d9-unlocked-state');
+                    if (d9UnlockedState) d9UnlockedState.classList.remove('hidden');
+
+                    const d9StatLocked = document.getElementById('d9-stat-locked');
+                    const d9StatResolved = document.getElementById('d9-stat-resolved');
+                    if (d9StatLocked) d9StatLocked.textContent = '0';
+                    if (d9StatResolved) d9StatResolved.textContent = '3';
+                    
+                    const d9FilterLocked = document.getElementById('d9-filter-locked-count');
+                    const d9FilterActive = document.getElementById('d9-filter-active-count');
+                    if (d9FilterLocked) d9FilterLocked.textContent = '0';
+                    if (d9FilterActive) d9FilterActive.textContent = '3';
+                }
             });
         }
 
@@ -1047,10 +1364,10 @@
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            switchDesign(1);
+            switchDesign(9);
         });
         // Run immediately as well
-        switchDesign(1);
+        switchDesign(9);
     </script>
 </body>
 </html>
