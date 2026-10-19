@@ -149,10 +149,16 @@
 
     <!-- ================= เมนูสลับดีไซน์ ================= -->
     <div class="max-w-[1100px] mx-auto mb-6 flex justify-between items-center relative z-50 gap-2 flex-wrap sm:flex-nowrap">
-        <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 cursor-pointer">
-            <span class="material-icons text-emerald-700 text-sm" aria-hidden="true">phonelink_lock</span>
-            <span>ดูหน้าตั้งค่า OTP (8 Interactive Designs)</span>
-        </a>
+        <div class="flex items-center gap-2 flex-wrap">
+            <a href="reset-otp.html" class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 cursor-pointer">
+                <span class="material-icons text-emerald-700 text-sm" aria-hidden="true">phonelink_lock</span>
+                <span>ดูหน้าตั้งค่า OTP (9 Designs)</span>
+            </a>
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-700 cursor-pointer">
+                <span class="material-icons text-amber-700 text-sm" aria-hidden="true">admin_panel_settings</span>
+                <span>🤫 เมนูลับ ITS Lab</span>
+            </a>
+        </div>
         <div class="relative" id="designDropdownContainer">
             <button id="designMenuBtn" type="button" aria-haspopup="true" aria-expanded="false"
                 aria-controls="designMenu" onclick="toggleDesignMenu(event)"
