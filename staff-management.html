@@ -150,13 +150,17 @@
     <!-- ================= เมนูสลับดีไซน์ ================= -->
     <div class="max-w-[1100px] mx-auto mb-6 flex justify-between items-center relative z-50 gap-2 flex-wrap sm:flex-nowrap">
         <div class="flex items-center gap-2 flex-wrap">
+            <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-700 cursor-pointer">
+                <span class="material-icons text-indigo-700 text-sm" aria-hidden="true">auto_awesome_motion</span>
+                <span>🏛️ ศูนย์รวมดีไซน์ทั้งหมด (21 ดีไซน์)</span>
+            </a>
             <a href="reset-otp.html" class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 cursor-pointer">
                 <span class="material-icons text-emerald-700 text-sm" aria-hidden="true">phonelink_lock</span>
                 <span>ดูหน้าตั้งค่า OTP (9 Designs)</span>
             </a>
-            <a href="index.html" class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-700 cursor-pointer">
+            <a href="secret-menu.html" class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-full text-xs font-bold shadow-sm transition-all focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-700 cursor-pointer">
                 <span class="material-icons text-amber-700 text-sm" aria-hidden="true">admin_panel_settings</span>
-                <span>🤫 เมนูลับ ITS Lab</span>
+                <span>🤫 เมนูลับ ITS Lab (5 Designs)</span>
             </a>
         </div>
         <div class="relative" id="designDropdownContainer">
@@ -242,10 +246,22 @@
                     <div class="border-t border-slate-200"></div>
                 </div>
                 <a href="index.html"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-indigo-600">auto_awesome_motion</span> 🏛️ ศูนย์รวมดีไซน์ (Showcase 21 แบบ)</span>
+                    <span class="material-icons text-sm text-indigo-600">arrow_forward</span>
+                </a>
+                <a href="reset-otp.html"
                     class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors">
                     <span class="flex items-center gap-2"><span
-                            class="material-icons text-sm text-purple-600">phonelink_lock</span> ปลดล็อค OTP (8 Designs)</span>
+                            class="material-icons text-sm text-purple-600">phonelink_lock</span> ปลดล็อค OTP (9 Designs)</span>
                     <span class="material-icons text-sm text-purple-600">arrow_forward</span>
+                </a>
+                <a href="secret-menu.html"
+                    class="w-full text-left px-3.5 py-2.5 rounded-full font-semibold flex items-center justify-between text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors">
+                    <span class="flex items-center gap-2"><span
+                            class="material-icons text-sm text-amber-600">admin_panel_settings</span> เมนูลับ ITS Lab (5 Designs)</span>
+                    <span class="material-icons text-sm text-amber-600">arrow_forward</span>
                 </a>
             </div>
         </div>
@@ -1274,7 +1290,17 @@
                     }
                 }
             }
-            document.getElementById('currentDesignLabel').innerText = 'เลือกดีไซน์: สรุปดีไซน์';
+            const designLabels = {
+                1: '1. ดีไซน์ต้นฉบับ',
+                2: '2. Split Master-Detail',
+                3: '3. Enterprise Table',
+                4: '4. Modern Cards',
+                5: '5. Kanban Board',
+                6: '6. Glassmorphism',
+                7: '7. สรุปดีไซน์ (Hybrid Custom)'
+            };
+            const labelEl = document.getElementById('currentDesignLabel');
+            if (labelEl) labelEl.innerText = 'เลือกดีไซน์: ' + (designLabels[num] || 'สรุปดีไซน์');
             render();
         }
 
@@ -1632,7 +1658,13 @@
         }
 
         // Init
-        render();
+        const urlParams = new URLSearchParams(window.location.search);
+        const designParam = parseInt(urlParams.get('design'), 10);
+        if (designParam >= 1 && designParam <= 7) {
+            switchDesign(designParam);
+        } else {
+            switchDesign(7);
+        }
     </script>
 </body>
 

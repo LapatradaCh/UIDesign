@@ -136,14 +136,16 @@
                 <h2 class="font-bold text-lg text-slate-800">การตั้งค่าระบบ</h2>
             </div>
             <div class="p-3 flex flex-col gap-1.5 flex-1">
-                <a href="staff-management.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-medium transition-colors"><span class="text-lg">👥</span> จัดการเจ้าหน้าที่</a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-medium transition-colors"><span class="text-lg">🔑</span> รหัสเข้าหน่วยงาน</a>
+                <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-indigo-700 bg-indigo-50 hover:bg-indigo-100 font-bold border border-indigo-200 transition-colors">
+                    <span class="text-lg">🏛️</span> ศูนย์รวมดีไซน์ (21 แบบ)
+                </a>
+                <a href="staff-management.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-medium transition-colors"><span class="text-lg">👥</span> จัดการเจ้าหน้าที่ (7 Designs)</a>
                 <a href="reset-otp.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-traffy-light text-traffy-dark relative">
                     <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-traffy-green rounded-r-full"></div>
-                    <span class="text-lg">🔓</span> รีเซ็ต & ปลดล็อค OTP
+                    <span class="text-lg">🔓</span> รีเซ็ต & ปลดล็อค OTP (9 Designs)
                 </a>
-                <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-amber-700 bg-amber-50 hover:bg-amber-100 font-bold border border-amber-200 transition-colors">
-                    <span class="text-lg">🤫</span> เมนูลับ ITS Lab (Secret)
+                <a href="secret-menu.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-amber-700 bg-amber-50 hover:bg-amber-100 font-bold border border-amber-200 transition-colors">
+                    <span class="text-lg">🤫</span> เมนูลับ ITS Lab (5 Designs)
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-medium transition-colors"><span class="text-lg">🌐</span> ตั้งค่าแผนที่สาธารณะ</a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-600 hover:bg-slate-50 font-medium transition-colors"><span class="text-lg">🖼️</span> เปลี่ยนชื่อและLogo</a>
@@ -1313,11 +1315,17 @@
         }
 
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            switchDesign(9);
-        });
-        // Run immediately as well
-        switchDesign(9);
+        function initOtpPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const designParam = parseInt(urlParams.get('design'), 10);
+            if (designParam >= 1 && designParam <= 9) {
+                switchDesign(designParam);
+            } else {
+                switchDesign(9);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', initOtpPage);
+        initOtpPage();
     </script>
 </body>
 </html>

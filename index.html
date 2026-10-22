@@ -3,835 +3,1153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>เมนูลับ ITS Lab Admin - Multi-Design Studio</title>
+    <title>ITS Lab - Design System Showcase & Archive Catalog (คลังดีไซน์รวม 21 แบบ)</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { 
-                        sans: ['Inter', 'Prompt', 'sans-serif'] 
+                    fontFamily: {
+                        sans: ['Anuphan', 'Inter', 'sans-serif'],
+                        mono: ['Courier New', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        }
                     },
                     boxShadow: {
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.08)',
+                        'hover-card': '0 20px 30px -10px rgba(0, 0, 0, 0.12)',
+                        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.4)',
+                        'glow-indigo': '0 0 25px -5px rgba(99, 102, 241, 0.4)',
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; }
-        button, select, input, textarea { min-height: 44px; }
-        .chip-btn, nav button, header button { min-height: unset !important; }
-        .chip-btn { min-height: 36px !important; }
-        
-        /* Hide Scrollbar but keep functionality */
+        *, ::before, ::after { font-family: 'Anuphan', 'Inter', sans-serif !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes popIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
-        .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
-        .animate-slide-up { animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-pop-in { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        
+        .design-card {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .design-card:hover {
+            transform: translateY(-4px);
+        }
 
-        /* Focus styles for cards (Optimized for Mobile, No dull grayscale) */
-        .focus-card-active { z-index: 10; box-shadow: 0 12px 28px -4px rgba(236, 72, 153, 0.18), 0 6px 12px -4px rgba(0, 0, 0, 0.05); border-color: #ec4899; }
-        .focus-card-inactive { border-color: #e2e8f0; opacity: 1; }
-        .focus-card-inactive:hover { border-color: #cbd5e1; }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 h-full flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-900 min-h-full flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
     <!-- Top Navigation Header -->
-    <header role="banner" class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-            <!-- Brand / Secret Menu Badge -->
+            <!-- Brand -->
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-700 via-indigo-800 to-slate-900 text-white rounded-xl flex items-center justify-center font-bold text-base shadow-sm relative">
-                    <i class="fa-solid fa-user-secret"></i>
-                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                    </span>
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-emerald-500 text-white flex items-center justify-center font-black text-lg shadow-md shadow-indigo-200">
+                    <i class="fa-solid fa-shapes"></i>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-sm font-bold text-slate-900 leading-tight">ITS Lab Admin</h1>
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                            <i class="fa-solid fa-key text-[9px]"></i> เมนูลับ
+                        <span class="text-base font-extrabold text-slate-900 tracking-tight">ITS Lab Design Archive</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-700 border border-indigo-200 uppercase tracking-wider">
+                            21 Designs
                         </span>
                     </div>
-                    <p class="text-xs text-slate-500">Backoffice Secret Tools & Dev Hub</p>
+                    <p class="text-xs text-slate-500 font-medium">ศูนย์รวมคลังดีไซน์ & วิวัฒนาการ UI ทุกระบบ</p>
                 </div>
             </div>
 
-            <!-- Quick Navigation to Other Systems & Desktop Switcher -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Links to other pages -->
-                <div class="hidden md:flex items-center gap-1.5 border-r border-slate-200 pr-3 mr-1 text-xs font-semibold">
-                    <a href="staff-management.html" class="px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-users text-slate-500"></i>
-                        <span>จัดการเจ้าหน้าที่</span>
+            <!-- Direct System Jump Links -->
+            <div class="flex items-center gap-2">
+                <div class="hidden md:flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100/80 p-1 rounded-2xl border border-slate-200">
+                    <a href="staff-management.html" class="px-3 py-1.5 rounded-xl hover:bg-white hover:text-emerald-700 hover:shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-emerald-600"></i>
+                        <span>จัดการเจ้าหน้าที่ (7)</span>
                     </a>
-                    <a href="reset-otp.html" class="px-3 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-mobile-screen text-slate-500"></i>
-                        <span>ตั้งค่า OTP</span>
+                    <a href="reset-otp.html" class="px-3 py-1.5 rounded-xl hover:bg-white hover:text-blue-700 hover:shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-mobile-screen-button text-blue-600"></i>
+                        <span>ปลดล็อค OTP (9)</span>
+                    </a>
+                    <a href="secret-menu.html" class="px-3 py-1.5 rounded-xl hover:bg-white hover:text-amber-700 hover:shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-secret text-amber-600"></i>
+                        <span>เมนูลับ (5)</span>
                     </a>
                 </div>
 
-                <!-- Desktop Design Switcher -->
-                <nav aria-label="Design Switcher" class="hidden xl:flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 text-xs font-semibold gap-1">
-                    <button onclick="switchDesign(1)" id="btn-1" class="px-3 py-2 rounded-xl transition flex items-center space-x-2 bg-white text-slate-900 shadow-sm font-bold border border-slate-200">
-                        <i class="fa-solid fa-columns text-slate-700"></i><span>1. Master</span>
-                    </button>
-                    <button onclick="switchDesign(2)" id="btn-2" class="px-3 py-2 rounded-xl transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 border border-transparent">
-                        <i class="fa-solid fa-rocket text-teal-600"></i><span>2. Launchpad</span>
-                    </button>
-                    <button onclick="switchDesign(3)" id="btn-3" class="px-3 py-2 rounded-xl transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 border border-transparent">
-                        <i class="fa-solid fa-folder-tree text-amber-600"></i><span>3. Category Hub</span>
-                    </button>
-                    <button onclick="switchDesign(4)" id="btn-4" class="px-3 py-2 rounded-xl transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 border border-transparent">
-                        <i class="fa-solid fa-bolt text-indigo-600"></i><span>4. Palette</span>
-                    </button>
-                    <button onclick="switchDesign(5)" id="btn-5" class="px-3 py-2 rounded-xl transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 border border-transparent">
-                        <i class="fa-solid fa-layer-group text-pink-600"></i><span>5. Focus Stack</span>
-                    </button>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Mobile Quick Switcher Bar -->
-        <div class="xl:hidden px-4 py-2.5 bg-slate-100 border-t border-slate-200 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar text-xs">
-            <div class="flex space-x-1.5">
-                <button onclick="switchDesign(1)" id="mb-1" class="px-3.5 py-1.5 bg-white rounded-xl font-bold text-slate-900 shadow-sm whitespace-nowrap border border-slate-200">1. Master</button>
-                <button onclick="switchDesign(2)" id="mb-2" class="px-3.5 py-1.5 bg-slate-200/50 rounded-xl font-medium text-slate-600 whitespace-nowrap">2. Launchpad</button>
-                <button onclick="switchDesign(3)" id="mb-3" class="px-3.5 py-1.5 bg-slate-200/50 rounded-xl font-medium text-slate-600 whitespace-nowrap">3. Category Hub</button>
-                <button onclick="switchDesign(4)" id="mb-4" class="px-3.5 py-1.5 bg-slate-200/50 rounded-xl font-medium text-slate-600 whitespace-nowrap">4. Palette</button>
-                <button onclick="switchDesign(5)" id="mb-5" class="px-3.5 py-1.5 bg-slate-200/50 rounded-xl font-medium text-slate-600 whitespace-nowrap">5. Focus Stack</button>
-            </div>
-            <div class="flex items-center gap-1 pl-2 border-l border-slate-200 whitespace-nowrap">
-                <a href="staff-management.html" class="px-2.5 py-1.5 bg-white/80 rounded-lg text-slate-600 font-semibold text-[11px] shadow-xs">👥 เจ้าหน้าที่</a>
-                <a href="reset-otp.html" class="px-2.5 py-1.5 bg-white/80 rounded-lg text-slate-600 font-semibold text-[11px] shadow-xs">🔓 OTP</a>
+                <!-- Compare Mode Button -->
+                <button onclick="openCompareModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold shadow-sm transition flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-code-compare"></i>
+                    <span class="hidden sm:inline">โหมดเปรียบเทียบ</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main id="app-container" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col relative">
-        <!-- Rendered dynamically -->
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-indigo-50/70 via-white to-slate-50 border-b border-slate-200 py-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white text-indigo-800 border border-indigo-200/80 shadow-xs mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span>Design History & Version Archive Catalog</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        คลังดีไซน์รวมทุกหน้า <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-600">ทั้งของเก่าและของใหม่</span>
+                    </h1>
+                    <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                        รวบรวมงานดีไซน์ที่เคยออกแบบไว้ทั้งหมด <strong class="font-bold text-slate-900">21 ดีไซน์</strong> จากทั้ง 3 ระบบหลัก เพื่อให้คุณสามารถย้อนกลับมาตรวจสอบของเก่า เปรียบเทียบความแตกต่าง และนำไอเดียแต่ละเวอร์ชันมาต่อยอดปรับปรุงใหม่ได้อย่างสะดวกสบาย
+                    </p>
+                </div>
+
+                <!-- System Stats Cards -->
+                <div class="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
+                    <div onclick="filterSystem('staff')" class="cursor-pointer bg-white p-3.5 sm:p-4 rounded-2xl border border-emerald-200/80 shadow-xs hover:border-emerald-400 hover:shadow-md transition text-center group">
+                        <div class="w-8 h-8 mx-auto rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm mb-2 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-slate-900">7</div>
+                        <div class="text-[11px] font-bold text-slate-500">จัดการเจ้าหน้าที่</div>
+                    </div>
+                    <div onclick="filterSystem('otp')" class="cursor-pointer bg-white p-3.5 sm:p-4 rounded-2xl border border-blue-200/80 shadow-xs hover:border-blue-400 hover:shadow-md transition text-center group">
+                        <div class="w-8 h-8 mx-auto rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm mb-2 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-slate-900">9</div>
+                        <div class="text-[11px] font-bold text-slate-500">ปลดล็อค OTP</div>
+                    </div>
+                    <div onclick="filterSystem('secret')" class="cursor-pointer bg-white p-3.5 sm:p-4 rounded-2xl border border-amber-200/80 shadow-xs hover:border-amber-400 hover:shadow-md transition text-center group">
+                        <div class="w-8 h-8 mx-auto rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm mb-2 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-slate-900">5</div>
+                        <div class="text-[11px] font-bold text-slate-500">เมนูลับหลังบ้าน</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content & Catalog -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+
+        <!-- Controls Toolbar: System Tabs, Status Filter, Search, View Mode -->
+        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs mb-8 space-y-4">
+            <!-- Row 1: System Category Pills -->
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs font-bold">
+                    <button onclick="filterSystem('all')" id="tab-sys-all" class="sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-900 text-white shadow-xs whitespace-nowrap">
+                        🌐 ทั้งหมด (21)
+                    </button>
+                    <button onclick="filterSystem('staff')" id="tab-sys-staff" class="sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                        👥 จัดการเจ้าหน้าที่ (7)
+                    </button>
+                    <button onclick="filterSystem('otp')" id="tab-sys-otp" class="sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                        🔓 ปลดล็อค & รีเซ็ต OTP (9)
+                    </button>
+                    <button onclick="filterSystem('secret')" id="tab-sys-secret" class="sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                        🤫 เมนูลับหลังบ้าน (5)
+                    </button>
+                </div>
+
+                <!-- View Mode Toggle -->
+                <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold text-slate-600">
+                    <button onclick="setViewMode('grid')" id="viewModeGrid" class="px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip"></i>
+                        <span>การ์ดละเอียด</span>
+                    </button>
+                    <button onclick="setViewMode('matrix')" id="viewModeMatrix" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-timeline"></i>
+                        <span>วิวัฒนาการ (Timeline)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Row 2: Status Sub-Filter & Live Search -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs font-semibold text-slate-600">
+                    <span class="text-slate-400 text-[11px] uppercase tracking-wider font-extrabold mr-1">สถานะ:</span>
+                    <button onclick="filterStatus('all')" id="stat-all" class="stat-btn px-3 py-1.5 rounded-xl bg-slate-200 text-slate-900 font-bold whitespace-nowrap">ทั้งหมด</button>
+                    <button onclick="filterStatus('active')" id="stat-active" class="stat-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 whitespace-nowrap flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>⭐ สรุปล่าสุด (Active)
+                    </button>
+                    <button onclick="filterStatus('prototype')" id="stat-prototype" class="stat-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 whitespace-nowrap flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>🧪 ดีไซน์ทางเลือก
+                    </button>
+                    <button onclick="filterStatus('legacy')" id="stat-legacy" class="stat-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 whitespace-nowrap flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>🏛️ ต้นฉบับดั้งเดิม
+                    </button>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="ค้นหาดีไซน์, แท็ก, คุณสมบัติ เช่น Table, Kanban..." 
+                           class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Stats Notice -->
+        <div class="flex items-center justify-between mb-4 px-1 text-xs text-slate-500 font-semibold">
+            <span id="resultsCount">กำลังแสดง 21 ดีไซน์</span>
+            <span class="text-slate-400">💡 คลิก "พรีวิวด่วน" เพื่อทดลองกดในหน้าเดียว หรือ "เปิดใช้งานจริง" เพื่อดูหน้าเต็ม</span>
+        </div>
+
+        <!-- Grid Container -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered Dynamically -->
+        </div>
+
+        <!-- Timeline Matrix Container (Hidden by default) -->
+        <div id="timelineMatrix" class="hidden space-y-8">
+            <!-- Rendered Dynamically -->
+        </div>
+
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 left-6 sm:left-auto bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl transform translate-y-32 opacity-0 transition-all duration-300 z-[100] text-sm flex items-center space-x-3 border border-slate-800">
-        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
-            <i class="fa-solid fa-check"></i>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium">
+        <p>ITS Lab Multi-Design Studio & Backoffice Systems • พัฒนาเพื่อการออกแบบ UI/UX ที่ตอบโจทย์การทำงานจริง</p>
+    </footer>
+
+    <!-- Interactive Live Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-2 sm:p-6 transition-all duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full h-[95vh] max-w-6xl flex flex-col overflow-hidden animate-pop-in">
+            <!-- Modal Header -->
+            <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase"></span>
+                    <h3 id="modalTitle" class="text-sm sm:text-base font-bold truncate">พรีวิวดีไซน์</h3>
+                </div>
+
+                <!-- Device Preview Switchers & Action Buttons -->
+                <div class="flex items-center gap-2">
+                    <div class="hidden sm:flex items-center bg-slate-800 p-1 rounded-xl text-xs font-bold text-slate-300">
+                        <button onclick="setPreviewDevice('desktop')" id="dev-desktop" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition"><i class="fa-solid fa-desktop mr-1"></i> Desktop</button>
+                        <button onclick="setPreviewDevice('tablet')" id="dev-tablet" class="px-2.5 py-1 rounded-lg hover:text-white transition"><i class="fa-solid fa-tablet-screen-button mr-1"></i> Tablet</button>
+                        <button onclick="setPreviewDevice('mobile')" id="dev-mobile" class="px-2.5 py-1 rounded-lg hover:text-white transition"><i class="fa-solid fa-mobile-screen mr-1"></i> Mobile</button>
+                    </div>
+
+                    <a id="modalExternalLink" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        <span>เปิดหน้าเต็ม</span>
+                    </a>
+
+                    <button onclick="closePreviewModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Iframe Canvas -->
+            <div class="flex-1 bg-slate-200 overflow-hidden relative flex items-center justify-center p-2 sm:p-4">
+                <div id="previewFrameContainer" class="w-full h-full bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300">
+                    <iframe id="previewIframe" src="" class="w-full h-full border-0"></iframe>
+                </div>
+            </div>
         </div>
-        <span id="toast-message" class="font-medium">ดำเนินการสำเร็จ</span>
     </div>
 
+    <!-- Side-by-Side Compare Modal -->
+    <div id="compareModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-2 sm:p-4 transition-all duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full h-[96vh] max-w-7xl flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code-compare text-indigo-400"></i>
+                    <h3 class="text-sm sm:text-base font-bold">โหมดเปรียบเทียบดีไซน์แบบ Side-by-Side</h3>
+                </div>
+                <button onclick="closeCompareModal()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Selectors Bar -->
+            <div class="p-3 bg-slate-100 border-b border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-700 whitespace-nowrap">ฝั่งซ้าย (แบบที่ 1):</span>
+                    <select id="compareSelectLeft" onchange="updateCompareViews()" class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <!-- Options generated dynamically -->
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-700 whitespace-nowrap">ฝั่งขวา (แบบที่ 2):</span>
+                    <select id="compareSelectRight" onchange="updateCompareViews()" class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <!-- Options generated dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Two Iframes Split View -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 bg-slate-200 p-2 overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+                    <div class="px-3 py-1.5 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-700 flex justify-between items-center">
+                        <span id="compareLabelLeft">ดีไซน์ 1</span>
+                        <a id="compareLinkLeft" href="#" target="_blank" class="text-indigo-600 hover:underline text-[11px]"><i class="fa-solid fa-external-link mr-1"></i>เปิดแยก</a>
+                    </div>
+                    <iframe id="compareIframeLeft" src="" class="flex-1 w-full border-0"></iframe>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+                    <div class="px-3 py-1.5 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-700 flex justify-between items-center">
+                        <span id="compareLabelRight">ดีไซน์ 7</span>
+                        <a id="compareLinkRight" href="#" target="_blank" class="text-indigo-600 hover:underline text-[11px]"><i class="fa-solid fa-external-link mr-1"></i>เปิดแยก</a>
+                    </div>
+                    <iframe id="compareIframeRight" src="" class="flex-1 w-full border-0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data & Script -->
     <script>
-        const tools = [
-            { id: 1, title: "1. สร้างหน่วยงานบัญชีทางการ", desc: "เปิดหน่วยงานใหม่ที่เป็นทางการ ปักหมุดพิกัด และระบบสร้าง QR Code พร้อมสุ่มรหัส Admin/Staff ให้อัตโนมัติ", category: "Org Management", icon: "fa-building-shield", fields: [ { name: "name", label: "ชื่อหน่วยงาน", type: "text", placeholder: "เช่น เทศบาลนคร...", required: true }, { name: "province", label: "จังหวัดที่ตั้ง", type: "select", options: ["กรุงเทพมหานคร", "เชียงใหม่", "ขอนแก่น", "ภูเก็ต"] }, { name: "latlon", label: "พิกัด (Lat,Lon)", type: "text", placeholder: "13.0,100.0" }, { name: "isClaim", label: "สร้างรหัส admin & staff อัตโนมัติ", type: "checkbox", default: true } ] },
-            { id: 2, title: "2. ดู/แก้ไข ข้อมูลหน่วยงาน และสิทธิ์ (Flags)", desc: "ค้นหาหน่วยงานเพื่อเปิด-ปิดฟีเจอร์หรือสิทธิ์พิเศษ เช่น สิทธิ์ใช้ AI, แผนที่สาธารณะ หรือแก้ไขพิกัดพื้นที่ดูแล", category: "Org Management", icon: "fa-sliders", fields: [ { name: "name", label: "ชื่อหน่วยงาน", type: "text", placeholder: "ใช้ % ค้นหาบางส่วน เช่น อบต.%" }, { name: "org_id", label: "หมายเลขหน่วยงาน (org_id)", type: "number", placeholder: "เช่น 1234" } ] },
-            { id: 3, title: "3. ดู/สร้าง รหัสขอเป็น admin/staff", desc: "ค้นหารหัส Claim Code เดิม หรือกดสุ่มสร้างรหัสชุดใหม่ (Re-generate) เพื่อยกเลิกรหัสเก่าทันทีเมื่อรหัสหลุด", category: "Org Management", icon: "fa-key", fields: [ { name: "org_id", label: "หมายเลขหน่วยงาน (org_id)", type: "number", placeholder: "เช่น 1234", required: true } ] },
-            { id: 4, title: "4. อัปเดต QR code", desc: "สร้างรูปภาพ QR Code ประจำหน่วยงานขึ้นมาใหม่และอัปเดตบนคลาวด์ กรณี QR Code เดิมเสียหรือมีการย้ายพิกัด", category: "Org Management", icon: "fa-qrcode", fields: [ { name: "org_id", label: "หมายเลขหน่วยงาน (org_id)", type: "number", placeholder: "เช่น 1234", required: true } ] },
-            { id: 5, title: "5. สร้างหน่วยงานตามผังองค์กร (Hierarchy)", desc: "ผูกโครงสร้างสายบังคับบัญชา (แม่-ลูก) เพื่อให้เรื่องร้องเรียนไหลอัตโนมัติ และกดดูผังองค์กรได้", category: "Org Management", icon: "fa-sitemap", fields: [ { name: "tag", label: "ชื่อของสาย hierarchy", type: "text", placeholder: "{bfmcc}" }, { name: "pathlist", label: "กรอก path ของหน่วยงาน", type: "textarea", placeholder: "1\n1.2" } ] },
-            { id: 6, title: "6. เปลี่ยนสถานะโพสต์เป็น เสร็จสิ้น/ไม่เกี่ยวข้อง", desc: "เครื่องมือฉุกเฉินสำหรับ 'ซ่อมเคส' ที่สถานะค้างหรือผิดพลาด บังคับปิดเคสเปลี่ยนสถานะทันที", category: "Ticket Repair", icon: "fa-triangle-exclamation", fields: [ { name: "ticket_id", label: "Ticket ID", type: "text", placeholder: "2026-XXXXXX", required: true }, { name: "state_type", label: "เปลี่ยนเป็นสถานะ", type: "select", options: ["เสร็จสิ้น", "ไม่เกี่ยวข้อง"] } ] },
-            { id: 7, title: "7. ดูรายละเอียดของการแจ้ง", desc: "ส่องข้อมูลเชิงลึกและประวัติลับของเรื่องร้องเรียน ค้นหาด้วย Ticket ID เพื่อดูไทม์ไลน์ดิบทั้งหมด", category: "Ticket Repair", icon: "fa-magnifying-glass-chart", fields: [ { name: "ticket_id", label: "Ticket ID", type: "text", placeholder: "2026-XXXXXX", required: true } ] },
-            { id: 8, title: "8. ดาวน์โหลดไฟล์ CSV", desc: "Export ข้อมูลเรื่องร้องเรียนทั้งหมดของระบบออกมาเป็นไฟล์ CSV สำหรับทีมหลังบ้านทำสถิติ", category: "Data & Analytics", icon: "fa-file-csv", fields: [] },
-            { id: 9, title: "9. คำนวณคะแนนคุณภาพประเมิน กทม.", desc: "ประมวลผลดัชนีคะแนน KPI การทำงานของ กทม. 50 เขต ออกมาเป็นไฟล์ตาราง CSV หรือ JSON", category: "Data & Analytics", icon: "fa-chart-pie", fields: [ { name: "output", label: "รูปแบบไฟล์ผลลัพธ์", type: "select", options: ["json", "csv"] } ] },
-            { id: 10, title: "10. Cloud Dashboard", desc: "มอนิเตอร์ดูความเสถียรของ Chatbot Traffy Fondue แบบ Real-time", category: "Data & Analytics", icon: "fa-cloud", isLink: true, linkUrl: "https://console.cloud.google.com/monitoring", fields: [] },
-            { id: 11, title: "11. ดู/เพิ่มสถานะพิเศษ (State Config)", desc: "สร้างขั้นตอนการทำงาน (Workflow/Status) พิเศษเฉพาะหน่วยงาน เช่น 'รออะไหล่'", category: "Org Management", icon: "fa-list-check", fields: [ { name: "org_id", label: "หมายเลขหน่วยงาน (org_id)", type: "number", placeholder: "เช่น 1234", required: true } ] }
+        // Database of all 21 designs across 3 systems
+        const allDesigns = [
+            // ==================== SYSTEM 1: STAFF MANAGEMENT (7 Designs) ====================
+            {
+                id: 'staff-1',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 1,
+                name: 'ดีไซน์ 1: คลาสสิกต้นฉบับ',
+                nameEn: 'Original Classic Grid & List',
+                status: 'legacy',
+                statusLabel: '🏛️ ดีไซน์เก่าดั้งเดิม',
+                statusBadgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                tag: 'Classic V1',
+                summary: 'รูปแบบหน้าจอแรกสุด แสดงการ์ดเจ้าหน้าที่ เบอร์โทร สิทธิ์ พร้อมปุ่ม 3 จุดสำหรับสลับดู/แก้ไขความรับผิดชอบ และแท็บแยกคำขอใหม่',
+                highlights: [
+                    'มีปุ่มสลับมุมมอง Grid และ List',
+                    'ค้นหาด้วยชื่อและเบอร์โทรศัพท์',
+                    'แก้ไขความรับผิดชอบผ่าน Popup Modal ซ้อน'
+                ],
+                rationale: 'เหมาะสำหรับย้อนดู Layout โครงสร้างเริ่มต้นและแนวคิดแรกของระบบ',
+                previewColor: 'from-emerald-500 to-teal-700',
+                icon: 'fa-table-cells-large',
+                url: 'staff-management.html?design=1'
+            },
+            {
+                id: 'staff-2',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 2,
+                name: 'ดีไซน์ 2: แยกหน้าจอคู่ (Split Master-Detail)',
+                nameEn: 'Split Master-Detail Layout',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Master-Detail',
+                summary: 'หน้าจอด้านซ้ายแสดงรายชื่อเจ้าหน้าที่แบบกะทัดรัด ด้านขวาเป็น Panel รายละเอียดเชิงลึกพร้อมแก้ไขข้อมูลได้ทันทีโดยไม่ต้องเปิด Modal ซ้อน',
+                highlights: [
+                    'คลิกเลือกชื่อปุ๊บ ข้อมูลด้านขวาเปลี่ยนทันที',
+                    'ไม่เกิด Modal หลุดบริบทสายตา',
+                    'ตรวจสอบประวัติและสิทธิ์รายคนได้อย่างรวดเร็ว'
+                ],
+                rationale: 'พัฒนาขึ้นเพื่อลดจำนวนการคลิกเปิด/ปิดหน้าต่าง Popup ให้ทำงานเร็วขึ้น',
+                previewColor: 'from-teal-600 to-cyan-700',
+                icon: 'fa-table-columns',
+                url: 'staff-management.html?design=2'
+            },
+            {
+                id: 'staff-3',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 3,
+                name: 'ดีไซน์ 3: ตารางองค์กรเต็มรูปแบบ',
+                nameEn: 'Enterprise Data Table View',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Data Table',
+                summary: 'ตารางข้อมูลหนาแน่นระดับ Enterprise สแกนดูสถานะการยืนยันตัวตน สิทธิ์ วันที่เข้าร่วม และแท็กหมวดหมู่ที่ดูแลได้ครบในบรรทัดเดียว',
+                highlights: [
+                    'จัดเก็บข้อมูลได้หนาแน่น สแกนด้วยสายตาง่าย',
+                    'คอลัมน์ชัดเจน แยกสิทธิ์และเบอร์โทรศัพท์',
+                    'เหมาะสำหรับองค์กรขนาดใหญ่ที่มีเจ้าหน้าที่จำนวนมาก'
+                ],
+                rationale: 'ทดลองนำเสนอเพื่อตอบสนองผู้ใช้สายงาน Admin ที่คุ้นชินกับระบบตาราง Excel',
+                previewColor: 'from-emerald-700 to-slate-800',
+                icon: 'fa-table',
+                url: 'staff-management.html?design=3'
+            },
+            {
+                id: 'staff-4',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 4,
+                name: 'ดีไซน์ 4: การ์ดทันสมัยพร้อมมินิแท็ก',
+                nameEn: 'Modern Cards Grid',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Modern Card',
+                summary: 'การ์ดสไตล์โมเดิร์นพร้อมสีแบ่งตามบทบาท แสดงแท็กความรับผิดชอบย่อเด่นชัดในตัวการ์ดโดยไม่ต้องกดเข้าไปดูด้านใน',
+                highlights: [
+                    'แสดงชิปความรับผิดชอบหลักในหน้าการ์ด',
+                    'ดีไซน์โปร่งตา รูปลักษณ์สะอาดทันสมัย',
+                    'ปุ่มจัดการสิทธิ์และการอนุมัติชัดเจน'
+                ],
+                rationale: 'เน้นความสวยงาม visual clarity และดูง่ายบนหน้าจอแท็บเล็ต',
+                previewColor: 'from-teal-500 to-emerald-600',
+                icon: 'fa-address-card',
+                url: 'staff-management.html?design=4'
+            },
+            {
+                id: 'staff-5',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 5,
+                name: 'ดีไซน์ 5: กระดานคัมบังตามบทบาท',
+                nameEn: 'Kanban Role Board',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Kanban Board',
+                summary: 'จัดกลุ่มเจ้าหน้าที่เป็นคอลัมน์ตามบทบาทและกระบวนการ: [รออนุมัติ (Pending)] -> [เจ้าหน้าที่ทั่วไป (Staff)] -> [ผู้ดูแลระบบ (Admin)]',
+                highlights: [
+                    'เห็นภาพรวมการกระจายตัวของกำลังคน',
+                    'นับจำนวนสมาชิกในแต่ละบทบาทอัตโนมัติ',
+                    'บริหารจัดการในรูปแบบ Workflow คล้าย Trello'
+                ],
+                rationale: 'ออกแบบมาเพื่อองค์กรที่ต้องการจัดลำดับขั้นและตรวจสอบคิวขอเข้าร่วมทีม',
+                previewColor: 'from-cyan-600 to-blue-700',
+                icon: 'fa-cubes-stacked',
+                url: 'staff-management.html?design=5'
+            },
+            {
+                id: 'staff-6',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 6,
+                name: 'ดีไซน์ 6: สไตล์กลาสมอร์ฟิซึม',
+                nameEn: 'Glassmorphism & Gradients',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Glassmorphism',
+                summary: 'ดีไซน์สุดพรีเมียมด้วยพื้นผิวกระจกฝ้า (Backdrop Blur) ผสมผสานการไล่ระดับสีนุ่มนวลและเงาแสงสะท้อนระดับไฮเอนด์',
+                highlights: [
+                    'เอฟเฟกต์ Glassmorphism หรูหราทันสมัย',
+                    'พาเลทสีพรีเมียม สบายตา',
+                    'การ์ดข้อมูลโปร่งแสงมีมิติลึกตื้น'
+                ],
+                rationale: 'ทดสอบงานดีไซน์แนว Modern UI Trend เพื่อดึงดูดสายตาและสร้างความประทับใจ',
+                previewColor: 'from-emerald-400 via-teal-500 to-cyan-600',
+                icon: 'fa-wand-magic-sparkles',
+                url: 'staff-management.html?design=6'
+            },
+            {
+                id: 'staff-7',
+                system: 'staff',
+                systemName: 'จัดการเจ้าหน้าที่',
+                systemBadgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                designNumber: 7,
+                name: 'ดีไซน์ 7: สรุปดีไซน์ไฟนอล (Hybrid Custom)',
+                nameEn: 'Hybrid Custom Master-Detail (WCAG 2.2)',
+                status: 'active',
+                statusLabel: '⭐ แนะนำ / สรุปล่าสุด',
+                statusBadgeColor: 'bg-emerald-500 text-white border-emerald-600 shadow-xs',
+                tag: 'Final Active',
+                summary: 'เวอร์ชันสรุปรวมจุดเด่นที่ดีที่สุด: Master-Detail ที่พัฒนาตามมาตรฐานสากล WCAG 2.2, ค้นหาไว, จัดการสิทธิ์และความรับผิดชอบ 37 หมวดหมู่อย่างเป็นระบบ พร้อมรองรับการใช้คีย์บอร์ดเต็มรูปแบบ',
+                highlights: [
+                    'ได้มาตรฐานการเข้าถึง WCAG 2.2 รองรับคีย์บอร์ดและ Screen Reader',
+                    'ปรับแต่งความรับผิดชอบ 37 หมวดแบบคลิกเลือกทันที',
+                    'แยกแท็บ Staff, Admin, User, Pending ชัดเจนและรวดเร็ว'
+                ],
+                rationale: 'เวอร์ชันปัจจุบันที่ผ่านการคัดสรรจุดแข็งจากทั้ง 6 แบบเดิม และปรับให้ใช้งานง่าย เสถียร และถูกต้องตามมาตรฐานมากที่สุด',
+                previewColor: 'from-emerald-600 via-emerald-700 to-teal-800',
+                icon: 'fa-crown',
+                url: 'staff-management.html?design=7'
+            },
+
+            // ==================== SYSTEM 2: RESET OTP (9 Designs) ====================
+            {
+                id: 'otp-1',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 1,
+                name: 'ดีไซน์ 1: ตารางคลาสสิก',
+                nameEn: 'Clean Table View',
+                status: 'legacy',
+                statusLabel: '🏛️ ดีไซน์เก่าดั้งเดิม',
+                statusBadgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                tag: 'Table View',
+                summary: 'ตารางแสดงรายการผู้ใช้งานที่ถูกล็อค OTP มีข้อมูลชื่อ เบอร์โทร สถานะ และปุ่มกดปลดล็อคในแถวตาราง',
+                highlights: [
+                    'รูปแบบตารางเรียบง่าย ดูรายชื่อผู้ใช้ที่ติดล็อคได้รวดเร็ว',
+                    'มีปุ่มปลดล็อคประจำแถว',
+                    'รองรับเลื่อนแนวนอนบนหน้าจอมือถือ'
+                ],
+                rationale: 'ต้นแบบดั้งเดิมของระบบปลดล็อค เหมาะสำหรับงานตรวจสอบแบบเรียงแถว',
+                previewColor: 'from-slate-600 to-slate-800',
+                icon: 'fa-table-list',
+                url: 'reset-otp.html?design=1'
+            },
+            {
+                id: 'otp-2',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 2,
+                name: 'ดีไซน์ 2: ค้นหาด่วนรายบุคคล',
+                nameEn: 'Quick Search & Action',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Single Lookup',
+                summary: 'กล่องค้นหาเบอร์โทรศัพท์ขนาดใหญ่สำหรับเคส Call Center / Support ที่มีคนโทรเข้ามาขอปลดล็อค พิมพ์ปุ๊บเจอข้อมูลและกดปลดล็อคได้ทันที',
+                highlights: [
+                    'ช่องกรอกเบอร์โทรค้นหาเด่นชัดกลางหน้าจอ',
+                    'ผลลัพธ์แสดงสถานะและปุ่มปลดล็อคแบบเจาะจง',
+                    'ลดความผิดพลาดในการคลิกผิดคน'
+                ],
+                rationale: 'ออกแบบมาเพื่อทีม Call Center ที่ต้องรับสายลูกค้าและปลดล็อคทีละรายอย่างรวดเร็ว',
+                previewColor: 'from-indigo-600 to-blue-700',
+                icon: 'fa-magnifying-glass',
+                url: 'reset-otp.html?design=2'
+            },
+            {
+                id: 'otp-3',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 3,
+                name: 'ดีไซน์ 3: แยกจอซ้ายขวา (Split View)',
+                nameEn: 'Master-Detail Split Screen',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Split View',
+                summary: 'ฝั่งซ้ายเป็นรายการคิวผู้ใช้ที่ถูกล็อค ฝั่งขวาเป็นแผงประวัติการขอ OTP ย้อนหลัง ละเอียดถึงประวัติการส่ง SMS และเหตุผลการถูกระงับ',
+                highlights: [
+                    'ดูไทม์ไลน์การกดขอ OTP ย้อนหลัง',
+                    'เห็นสาเหตุที่ระบบระงับเบอร์อย่างชัดเจน',
+                    'กดปลดล็อคพร้อมแนบเหตุผลการดำเนินการ'
+                ],
+                rationale: 'เหมาะสำหรับตรวจสอบเคสที่มีความน่าสงสัยก่อนทำการปลดล็อค',
+                previewColor: 'from-blue-600 to-indigo-800',
+                icon: 'fa-columns',
+                url: 'reset-otp.html?design=3'
+            },
+            {
+                id: 'otp-4',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 4,
+                name: 'ดีไซน์ 4: การ์ดกริดพร้อมตัวกรองเร็ว',
+                nameEn: 'Filter Grid & Quick Chips ✨',
+                status: 'prototype',
+                statusLabel: '✨ ทางเลือกเด่น',
+                statusBadgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                tag: 'Filter Grid',
+                summary: 'การ์ดผู้ใช้งานในรูปแบบตารางกริด พร้อมแท็บตัวกรองแยกตามประเภทเหตุผลที่ล็อค (เช่น กดรหัสผิดเกินกำหนด, OTP หมดอายุบ่อย)',
+                highlights: [
+                    'ฟิลเตอร์แยกตามเหตุผลที่ระบบล็อค',
+                    'การ์ดแสดงข้อมูลกระชับ อ่านง่ายในพริบตา',
+                    'ปุ่มปลดล็อคด่วนในการ์ดพร้อม Feedback สีทันใจ'
+                ],
+                rationale: 'ช่วยให้ Admin กรองเคสตามระดับความเร่งด่วนและเหตุผลได้อย่างมีประสิทธิภาพ',
+                previewColor: 'from-sky-500 to-indigo-600',
+                icon: 'fa-filter',
+                url: 'reset-otp.html?design=4'
+            },
+            {
+                id: 'otp-5',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 5,
+                name: 'ดีไซน์ 5: แนะนำแบบทีละขั้นตอน (Stepper Wizard)',
+                nameEn: 'Step-by-Step Security Wizard',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Security Wizard',
+                summary: 'กระบวนการ 3 ขั้นตอน: 1. ระบุเบอร์ -> 2. ตรวจสอบยืนยันตัวตน -> 3. ดำเนินการปลดล็อคและส่ง SMS แจ้งผล',
+                highlights: [
+                    'มี Stepper นำทางทีละสเต็ปชัดเจน',
+                    'มีระบบป้องกันการกดปลดล็อคผิดพลาด',
+                    'มี Log บันทึกยืนยันความปลอดภัย'
+                ],
+                rationale: 'เหมาะสำหรับเคสความมั่นคงปลอดภัยสูง ที่ต้องให้ Admin ตรวจสอบคำขอตามระเบียบ',
+                previewColor: 'from-violet-600 to-indigo-800',
+                icon: 'fa-list-ol',
+                url: 'reset-otp.html?design=5'
+            },
+            {
+                id: 'otp-6',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 6,
+                name: 'ดีไซน์ 6: คัมบังจัดการคิวปลดล็อค',
+                nameEn: 'Kanban Unlock Queue',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Kanban Queue',
+                summary: 'จัดคิวคำขอปลดล็อคตามสถานะ: [รอปลดล็อค] -> [กำลังตรวจสอบ] -> [ปลดล็อคสำเร็จแล้ว]',
+                highlights: [
+                    'เห็นปริมาณคิวงานที่ค้างอยู่ในระบบ',
+                    'จัดสรรงานระหว่างเจ้าหน้าที่ Support ได้อย่างราบรื่น',
+                    'ลดปัญหาการทำงานซ้ำซ้อน'
+                ],
+                rationale: 'ออกแบบมาสำหรับทีม Support หลายคนที่ต้องช่วยกันเคลียร์คิวปลดล็อคผู้ใช้',
+                previewColor: 'from-blue-700 to-slate-900',
+                icon: 'fa-chart-simple',
+                url: 'reset-otp.html?design=6'
+            },
+            {
+                id: 'otp-7',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 7,
+                name: 'ดีไซน์ 7: ฟีดความปลอดภัยเรียลไทม์',
+                nameEn: 'Security Activity Feed ✨',
+                status: 'prototype',
+                statusLabel: '✨ ทางเลือกเด่น',
+                statusBadgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                tag: 'Security Feed',
+                summary: 'แสดงรายการล็อคในรูปแบบ Live Security Timeline มีกราฟตรวจจับอัตราการล็อคที่ผิดปกติ และปุ่ม Action ด่วนทันที',
+                highlights: [
+                    'ฟีดความปลอดภัยแบบเรียลไทม์',
+                    'ตรวจจับการโจมตีหรือการขอ OTP ผิดปกติ',
+                    'มีปุ่มแก้ไขปัญหาด่วนในตัวฟีด'
+                ],
+                rationale: 'สร้างขึ้นเพื่อตอบโจทย์ทีม Cybersecurity ที่ต้องการเฝ้าระวังความเสี่ยงด้านการยืนยันตัวตน',
+                previewColor: 'from-rose-600 via-purple-700 to-indigo-800',
+                icon: 'fa-shield-halved',
+                url: 'reset-otp.html?design=7'
+            },
+            {
+                id: 'otp-8',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 8,
+                name: 'ดีไซน์ 8: ถาดสไลด์ด้านข้าง (Side Drawer)',
+                nameEn: 'Side Drawer Experience ✨',
+                status: 'prototype',
+                statusLabel: '✨ ทางเลือกเด่น',
+                statusBadgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                tag: 'Side Drawer',
+                summary: 'เมื่อคลิกเลือกผู้ใช้งาน ถาดหน้าต่าง Drawer จะสไลด์ออกมาจากขอบขวาอย่างนุ่มนวลเพื่อแสดงรายละเอียดเชิงลึกและปุ่มปลดล็อค',
+                highlights: [
+                    'เปิดรายละเอียดโดยไม่หลุดจากหน้าจอหลัก',
+                    'Animation สไลด์เปิด-ปิดนุ่มนวลสไตล์โมเดิร์นเว็บแอป',
+                    'รองรับ Bottom Sheet บนหน้าจอมือถือ'
+                ],
+                rationale: 'เพิ่มความคล่องตัวและยกระดับประสบการณ์ผู้ใช้งานให้รู้สึกลื่นไหลและทันสมัย',
+                previewColor: 'from-blue-500 to-cyan-600',
+                icon: 'fa-folder-open',
+                url: 'reset-otp.html?design=8'
+            },
+            {
+                id: 'otp-9',
+                system: 'otp',
+                systemName: 'ปลดล็อค & รีเซ็ต OTP',
+                systemBadgeColor: 'bg-blue-100 text-blue-800 border-blue-300',
+                designNumber: 9,
+                name: 'ดีไซน์ 9: อัจฉริยะค้นหาและฟีด (Smart Search & Feed)',
+                nameEn: 'Smart Search & Feed (All-In-One)',
+                status: 'active',
+                statusLabel: '⭐ แนะนำ / สรุปล่าสุด',
+                statusBadgeColor: 'bg-emerald-500 text-white border-emerald-600 shadow-xs',
+                tag: 'Final Active',
+                summary: 'ดีไซน์สรุปรวมจุดเด่นที่ดีที่สุด: ค้นหาด่วนแบบ Fuzzy Search, ตัวกรองระดับความเสี่ยง, ประวัติไทม์ไลน์ย้อนหลัง, และปุ่มปลดล็อค 1-Click พร้อม Feedback ทันที',
+                highlights: [
+                    'ค้นหาด่วนตามเบอร์โทรหรือชื่อแบบ Real-time',
+                    'ปลดล็อคแบบ 1-Click สำเร็จทันทีพร้อม Toast แจ้งเตือน',
+                    'เชื่อมโยงสถานะระหว่างแท็บและเก็บประวัติการทำงาน'
+                ],
+                rationale: 'เวอร์ชันสมบูรณ์ที่สุดที่ดึงเอาข้อดีของทั้ง 8 ดีไซน์ก่อนหน้ามารวมไว้ในหน้าเดียวอย่างลงตัว',
+                previewColor: 'from-emerald-600 via-blue-600 to-indigo-700',
+                icon: 'fa-star',
+                url: 'reset-otp.html?design=9'
+            },
+
+            // ==================== SYSTEM 3: SECRET MENU & DEV TOOLS (5 Designs) ====================
+            {
+                id: 'secret-1',
+                system: 'secret',
+                systemName: 'เมนูลับหลังบ้าน',
+                systemBadgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+                designNumber: 1,
+                name: 'ดีไซน์ 1: มาสเตอร์คอนโซล (Master Console)',
+                nameEn: 'Master Backoffice Console',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Console',
+                summary: 'แผงคอนโซลควบคุมหลักแบบ 2 คอลัมน์ ด้านซ้ายเลือกเครื่องมือหลังบ้านทั้ง 11 ตัว ด้านขวาเป็นแบบฟอร์มคำสั่งและแสดงผลลัพธ์ JSON',
+                highlights: [
+                    'เลือกเครื่องมือด้านซ้าย รันคำสั่งด้านขวา',
+                    'มีแบบฟอร์ม interactive ครบทั้ง 11 เครื่องมือ',
+                    'แสดงผลลัพธ์ข้อมูลจำลองพร้อมปุ่มคัดลอก'
+                ],
+                rationale: 'หน้าจอสำหรับเจ้าหน้าที่เทคนิคจัดการฐานข้อมูลและโครงสร้างระบบ',
+                previewColor: 'from-amber-600 to-orange-700',
+                icon: 'fa-terminal',
+                url: 'secret-menu.html?design=1'
+            },
+            {
+                id: 'secret-2',
+                system: 'secret',
+                systemName: 'เมนูลับหลังบ้าน',
+                systemBadgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+                designNumber: 2,
+                name: 'ดีไซน์ 2: ลอนช์แพดด่วน (Launchpad Grid)',
+                nameEn: 'App Launchpad Grid',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Launchpad',
+                summary: 'หน้าต่างไอคอนแอปแบบ Launchpad คล้าย macOS หรือสมาร์ทโฟน คลิกที่ไอคอนเพื่อเปิดหน้าต่างรันคำสั่งเครื่องมือนั้นๆ',
+                highlights: [
+                    'ไอคอนขนาดใหญ่ สีสันจัดจ้านชัดเจน',
+                    'ค้นหาเครื่องมือได้ด้วยชื่อภาษาไทย',
+                    'เหมาะสำหรับการใช้งานผ่านแท็บเล็ต'
+                ],
+                rationale: 'เปลี่ยนมุมมองเครื่องมือเทคนิคที่ซับซ้อนให้ดูเข้าถึงง่ายและเป็นมิตร',
+                previewColor: 'from-teal-600 to-emerald-700',
+                icon: 'fa-rocket',
+                url: 'secret-menu.html?design=2'
+            },
+            {
+                id: 'secret-3',
+                system: 'secret',
+                systemName: 'เมนูลับหลังบ้าน',
+                systemBadgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+                designNumber: 3,
+                name: 'ดีไซน์ 3: ฮับแยกตามหมวดหมู่ (Category Hub)',
+                nameEn: 'Categorized Tools Hub',
+                status: 'active',
+                statusLabel: '⭐ แนะนำ / ใช้งานง่าย',
+                statusBadgeColor: 'bg-emerald-500 text-white border-emerald-600 shadow-xs',
+                tag: 'Category Hub',
+                summary: 'จัดระเบียบเครื่องมือ 11 ตัวออกเป็น 3 หมวดชัดเจน: จัดการหน่วยงาน (Org), ซ่อมเคสฉุกเฉิน (Ticket Repair), ข้อมูลและสถิติ (Data & Analytics)',
+                highlights: [
+                    'ฟิลเตอร์แยกหมวดหมู่งานอย่างเป็นระบบ',
+                    'การ์ดเครื่องมือมีคำอธิบายประโยชน์การใช้งาน',
+                    'ทำงานได้ทั้งโหมด List และ Expanded Form'
+                ],
+                rationale: 'ช่วยให้เจ้าหน้าที่หลังบ้านค้นหาเครื่องมือตรงตามลักษณะงานได้อย่างเป็นระเบียบ',
+                previewColor: 'from-amber-500 via-orange-600 to-red-600',
+                icon: 'fa-folder-tree',
+                url: 'secret-menu.html?design=3'
+            },
+            {
+                id: 'secret-4',
+                system: 'secret',
+                systemName: 'เมนูลับหลังบ้าน',
+                systemBadgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+                designNumber: 4,
+                name: 'ดีไซน์ 4: แป้นพิมพ์คำสั่งด่วน (Command Palette)',
+                nameEn: 'Power User Command Palette ⚡',
+                status: 'prototype',
+                statusLabel: '⚡ Power User',
+                statusBadgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
+                tag: 'Command Palette',
+                summary: 'สำหรับ Power Users และนักพัฒนา คล้าย Spotlight หรือ Alfred พิมพ์ชื่อคำสั่งหรือคีย์เวิร์ดเพื่อค้นหาและรันเครื่องมือฉุกเฉินได้ทันทีโดยไม่ต้องคลิกเมาส์',
+                highlights: [
+                    'ค้นหาเร็วแบบ Type-ahead Search',
+                    'นำทางด้วยลูกศรขึ้น-ลงบนคีย์บอร์ด',
+                    'ประหยัดเวลาการทำงานของ Developer'
+                ],
+                rationale: 'ออกแบบมาเพื่อความเร็วสูงสุดสำหรับผู้เชี่ยวชาญด้านระบบ',
+                previewColor: 'from-indigo-700 via-purple-700 to-slate-900',
+                icon: 'fa-bolt',
+                url: 'secret-menu.html?design=4'
+            },
+            {
+                id: 'secret-5',
+                system: 'secret',
+                systemName: 'เมนูลับหลังบ้าน',
+                systemBadgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+                designNumber: 5,
+                name: 'ดีไซน์ 5: แผงโฟกัสแยกชั้น (Focus Stack)',
+                nameEn: 'Focus Stack Accordion',
+                status: 'prototype',
+                statusLabel: '🧪 ดีไซน์ทางเลือก',
+                statusBadgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                tag: 'Focus Stack',
+                summary: 'แผงรายการแบบ Accordion พับเก็บได้อัตโนมัติ ช่วยให้เจ้าหน้าที่โฟกัสกับเครื่องมือที่กำลังใช้งานอยู่ทีละตัวโดยไม่มีสิ่งรบกวนสายตา',
+                highlights: [
+                    'เปิดเฉพาะเครื่องมือที่กำลังใช้งาน ยุบส่วนอื่นเพื่อลดความวุ่นวาย',
+                    'ออกแบบมาเพื่อลดความผิดพลาดในการกรอกข้อมูล',
+                    'เหมาะมากกับหน้าจอสมาร์ทโฟน'
+                ],
+                rationale: 'ลด Cognitive Load บนอุปกรณ์หน้าจอเล็ก และเน้นการกรอกข้อมูลอย่างแม่นยำ',
+                previewColor: 'from-pink-600 via-purple-600 to-indigo-700',
+                icon: 'fa-layer-group',
+                url: 'secret-menu.html?design=5'
+            }
         ];
 
-        let currentDesign = 1;
-        let currentToolId = 1;
-        
-        let d1_viewMode = 'list'; 
-        let d2_viewMode = 'grid'; 
-        let d3_viewMode = 'list'; 
-        let d3_activeCategory = 'All'; 
-        let d4_viewMode = 'palette'; 
+        // State variables
+        let selectedSystem = 'all';
+        let selectedStatus = 'all';
+        let searchQuery = '';
+        let currentView = 'grid'; // 'grid' | 'matrix'
 
-        function switchDesign(design) {
-            currentDesign = design;
-            d1_viewMode = 'list';
-            d2_viewMode = 'grid';
-            d3_viewMode = 'list';
-            d4_viewMode = 'palette';
+        // Render Cards
+        function renderCards() {
+            const grid = document.getElementById('cardsGrid');
+            const countLabel = document.getElementById('resultsCount');
             
-            // Design 5 starts in clean collapsed state for best mobile UX
-            if (design === 5) {
-                currentToolId = null;
-            } else if (!currentToolId) {
-                currentToolId = 1;
+            const filtered = allDesigns.filter(d => {
+                const matchSys = selectedSystem === 'all' || d.system === selectedSystem;
+                const matchStat = selectedStatus === 'all' || d.status === selectedStatus;
+                const q = searchQuery.toLowerCase().trim();
+                const matchSearch = !q || 
+                    d.name.toLowerCase().includes(q) || 
+                    d.nameEn.toLowerCase().includes(q) || 
+                    d.summary.toLowerCase().includes(q) || 
+                    d.tag.toLowerCase().includes(q) ||
+                    d.highlights.some(h => h.toLowerCase().includes(q));
+                return matchSys && matchStat && matchSearch;
+            });
+
+            countLabel.innerText = `กำลังแสดง ${filtered.length} จาก 21 ดีไซน์`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center bg-white rounded-3xl border border-slate-200">
+                        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800">ไม่พบดีไซน์ที่ตรงกับเงื่อนไขการค้นหา</h3>
+                        <p class="text-xs text-slate-500 mt-1">ลองเปลี่ยนคำค้นหา หรือเลือกตัวกรองสถานะเป็น "ทั้งหมด"</p>
+                        <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition">
+                            ล้างตัวกรองทั้งหมด
+                        </button>
+                    </div>
+                `;
+                return;
             }
-            
-            [1, 2, 3, 4, 5].forEach(d => {
-                const btn = document.getElementById(`btn-${d}`);
-                const mb = document.getElementById(`mb-${d}`);
+
+            grid.innerHTML = filtered.map(d => {
+                const highlightsHtml = d.highlights.map(h => `
+                    <li class="flex items-start gap-2 text-xs text-slate-600">
+                        <i class="fa-solid fa-check text-emerald-500 text-[11px] mt-0.5 shrink-0"></i>
+                        <span>${h}</span>
+                    </li>
+                `).join('');
+
+                return `
+                    <div class="design-card bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-hover-card flex flex-col overflow-hidden relative group">
+                        
+                        <!-- Top Banner / Preview Header -->
+                        <div class="h-28 bg-gradient-to-r ${d.previewColor} p-4 text-white relative overflow-hidden flex flex-col justify-between">
+                            <div class="absolute -right-4 -bottom-6 opacity-15 text-7xl font-black">
+                                <i class="fa-solid ${d.icon}"></i>
+                            </div>
+                            
+                            <!-- Badges -->
+                            <div class="flex items-center justify-between gap-2 relative z-10">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-black/25 backdrop-blur-md text-white border border-white/20">
+                                    ${d.systemName}
+                                </span>
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold border ${d.statusBadgeColor}">
+                                    ${d.statusLabel}
+                                </span>
+                            </div>
+
+                            <div class="relative z-10">
+                                <span class="text-[11px] font-mono font-semibold text-white/80 uppercase tracking-widest">${d.tag}</span>
+                                <h3 class="text-base font-bold text-white tracking-tight leading-snug">${d.name}</h3>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400 font-mono mb-2">${d.nameEn}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed font-normal mb-3">
+                                    ${d.summary}
+                                </p>
+
+                                <!-- Highlights -->
+                                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                    <div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">จุดเด่นสำคัญ:</div>
+                                    <ul class="space-y-1.5">
+                                        ${highlightsHtml}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                                <button onclick="openPreviewModal('${d.id}')" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fa-solid fa-eye text-slate-500"></i>
+                                    <span>พรีวิวด่วน</span>
+                                </button>
+                                
+                                <a href="${d.url}" target="_blank" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <span>เปิดใช้งานจริง</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Timeline Matrix View
+        function renderMatrix() {
+            const matrixContainer = document.getElementById('timelineMatrix');
+            const systems = [
+                { id: 'staff', name: '👥 จัดการเจ้าหน้าที่ (Staff Management)', desc: 'วิวัฒนาการจาก Grid/List ดั้งเดิม สู่งาน Master-Detail มาตรฐาน WCAG 2.2' },
+                { id: 'otp', name: '🔓 ปลดล็อค OTP (OTP Unlock Management)', desc: 'วิวัฒนาการจาก Table คลาสสิก สู่ Smart Search & Real-time Security Feed' },
+                { id: 'secret', name: '🤫 เมนูลับหลังบ้าน (Backoffice Secret Tools)', desc: 'วิวัฒนาการจาก Master Console สู่ Command Palette และ Categorized Hub' }
+            ];
+
+            matrixContainer.innerHTML = systems.map(sys => {
+                const items = allDesigns.filter(d => d.system === sys.id);
+                return `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">
+                        <div class="mb-4">
+                            <h2 class="text-base font-extrabold text-slate-900">${sys.name}</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">${sys.desc}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            ${items.map(it => `
+                                <div class="p-3.5 rounded-2xl border ${it.status === 'active' ? 'border-emerald-500 bg-emerald-50/40 shadow-xs' : 'border-slate-200 bg-slate-50'} flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center justify-between gap-1 mb-1.5">
+                                            <span class="text-[10px] font-bold text-slate-500">ดีไซน์ที่ ${it.designNumber}</span>
+                                            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${it.statusBadgeColor}">${it.status === 'active' ? '⭐ ล่าสุด' : (it.status === 'legacy' ? '🏛️ เก่า' : '🧪 ทางเลือก')}</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-slate-900 leading-snug">${it.name}</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">${it.summary}</p>
+                                    </div>
+                                    <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                                        <button onclick="openPreviewModal('${it.id}')" class="text-indigo-600 hover:text-indigo-800 text-[11px] font-bold">พรีวิว</button>
+                                        <a href="${it.url}" target="_blank" class="text-slate-600 hover:text-slate-900 text-[11px] font-bold flex items-center gap-1">เปิดหน้าจริง <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filtering
+        function filterSystem(sys) {
+            selectedSystem = sys;
+            ['all', 'staff', 'otp', 'secret'].forEach(s => {
+                const btn = document.getElementById(`tab-sys-${s}`);
                 if (btn) {
-                    if (d === design) {
-                        btn.className = `px-3 py-2 rounded-xl transition flex items-center space-x-2 bg-white text-slate-900 shadow-sm font-bold border border-slate-200`;
+                    if (s === sys) {
+                        btn.className = "sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-900 text-white shadow-xs whitespace-nowrap";
                     } else {
-                        btn.className = "px-3 py-2 rounded-xl transition flex items-center space-x-2 text-slate-600 hover:text-slate-900 border border-transparent";
-                    }
-                }
-                if (mb) {
-                    if (d === design) {
-                        mb.className = "px-3.5 py-1.5 bg-white rounded-xl font-bold text-slate-900 shadow-sm whitespace-nowrap border border-slate-200";
-                    } else {
-                        mb.className = "px-3.5 py-1.5 bg-slate-200/50 rounded-xl font-medium text-slate-600 whitespace-nowrap border border-transparent";
+                        btn.className = "sys-tab-btn px-4 py-2 rounded-2xl transition bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap";
                     }
                 }
             });
-            renderApp();
+            renderCards();
         }
 
-        function renderApp() {
-            const container = document.getElementById('app-container');
-            if(!container) return;
-            container.innerHTML = '';
-            container.className = "flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col relative animate-fade-in";
-
-            if (currentDesign === 1) renderDesign1(container);
-            else if (currentDesign === 2) renderDesign2(container);
-            else if (currentDesign === 3) renderDesign3(container);
-            else if (currentDesign === 4) renderDesign4(container);
-            else if (currentDesign === 5) renderDesign5(container);
-        }
-
-        /* -------------------------------------------------------------------------
-           DESIGN 1: Master-Detail (Desktop & Mobile Adaptive)
-           ------------------------------------------------------------------------- */
-        function renderDesign1(container) {
-            const tool = tools.find(t => t.id === currentToolId) || tools[0];
-            const isMobile = window.innerWidth < 1024;
-
-            container.innerHTML = `
-                <div class="flex flex-col lg:flex-row gap-6 h-full">
-                    <aside class="w-full lg:w-80 flex-shrink-0 ${isMobile && d1_viewMode === 'form' ? 'hidden' : 'block'}">
-                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 lg:sticky lg:top-24">
-                            <div class="flex items-center justify-between px-3 py-2 border-b border-slate-100 mb-2">
-                                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">เมนูจัดการระบบ</h2>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">${tools.length} เครื่องมือ</span>
-                            </div>
-                            <nav class="space-y-1">
-                                ${tools.map(t => `
-                                    <button onclick="d1_selectTool(${t.id})" class="w-full text-left px-3.5 py-3 rounded-xl text-sm font-medium transition flex items-center space-x-3 ${t.id === currentToolId && !isMobile ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}">
-                                        <i class="fa-solid ${t.icon} w-5 text-center ${t.id === currentToolId && !isMobile ? 'text-white' : 'text-slate-400'}"></i>
-                                        <span class="truncate">${t.title}</span>
-                                    </button>
-                                `).join('')}
-                            </nav>
-                        </div>
-                    </aside>
-                    <main class="flex-1 ${isMobile && d1_viewMode === 'list' ? 'hidden' : 'block'}">
-                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8 animate-pop-in">
-                            ${isMobile ? `
-                            <div class="mb-5 pb-4 border-b border-slate-100">
-                                <button onclick="d1_backToList()" class="inline-flex items-center text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-xl transition">
-                                    <i class="fa-solid fa-arrow-left mr-2"></i> กลับไปหน้ารายการเมนู
-                                </button>
-                            </div>` : ''}
-                            <div class="border-b border-slate-100 pb-5 mb-6">
-                                <span class="inline-block px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg mb-2">${tool.category}</span>
-                                <h2 class="text-xl sm:text-2xl font-bold text-slate-900">${tool.title}</h2>
-                                <p class="text-sm text-slate-500 mt-1 leading-relaxed">${tool.desc}</p>
-                            </div>
-                            <div id="form-container-d1"></div>
-                            ${generateResultBox('d1')}
-                        </div>
-                    </main>
-                </div>
-            `;
-            if (!isMobile || d1_viewMode === 'form') {
-                renderFormFields('form-container-d1', tool, 'slate', 'd1');
-            }
-        }
-        function d1_selectTool(id) { currentToolId = id; d1_viewMode = 'form'; renderApp(); }
-        function d1_backToList() { d1_viewMode = 'list'; renderApp(); }
-
-        /* -------------------------------------------------------------------------
-           DESIGN 2: Mobile Launchpad (App Grid & Smooth Transition)
-           ------------------------------------------------------------------------- */
-        function renderDesign2(container) {
-            if (d2_viewMode === 'grid') {
-                container.innerHTML = `
-                    <div class="max-w-4xl mx-auto w-full space-y-8 animate-fade-in">
-                        <div class="text-center px-4">
-                            <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Design 2: App Launchpad</span>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 mb-2">หน้าจอแอปมือถือ (Launchpad)</h2>
-                            <p class="text-sm text-slate-600 max-w-lg mx-auto">แตะที่ไอคอนเพื่อสลับเข้าสู่หน้าต่างการทำงานเต็มจอ พร้อมปุ่มย้อนกลับ</p>
-                        </div>
-
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 px-2">
-                            ${tools.map(t => `
-                                <button onclick="d2_select(${t.id})" class="group flex flex-col items-center p-5 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-md hover:border-teal-200 transition-all cursor-pointer">
-                                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                                        <i class="fa-solid ${t.icon}"></i>
-                                    </div>
-                                    <span class="text-xs font-bold text-slate-800 text-center line-clamp-2 leading-snug">${t.title.replace(/^\d+\.\s*/, '')}</span>
-                                    <span class="text-[10px] text-slate-400 mt-1 text-center font-medium">${t.category.split(' ')[0]}</span>
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            } else {
-                const tool = tools.find(t => t.id === currentToolId);
-                container.innerHTML = `
-                    <div class="max-w-3xl mx-auto w-full animate-fade-in">
-                        <button onclick="d2_back()" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-teal-600 bg-white px-4 py-2.5 rounded-xl shadow-sm border border-slate-200 transition-colors">
-                            <i class="fa-solid fa-arrow-left"></i> ย้อนกลับไปหน้าเมนูหลัก
-                        </button>
-                        
-                        <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
-                            <div class="p-6 sm:p-8 bg-gradient-to-br from-teal-500 to-teal-700 text-white flex items-center gap-4">
-                                <div class="w-16 h-16 rounded-2xl bg-white/20 text-white flex items-center justify-center text-3xl shadow-inner backdrop-blur-sm flex-shrink-0">
-                                    <i class="fa-solid ${tool.icon}"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-bold text-teal-100 uppercase tracking-wider mb-1">${tool.category}</p>
-                                    <h2 class="text-xl sm:text-2xl font-bold leading-tight">${tool.title}</h2>
-                                </div>
-                            </div>
-                            
-                            <div class="p-6 sm:p-8 bg-white">
-                                <p class="text-sm text-slate-600 mb-6 pb-6 border-b border-slate-100 leading-relaxed">${tool.desc}</p>
-                                <div id="form-container-d2"></div>
-                                ${generateResultBox('d2')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                renderFormFields('form-container-d2', tool, 'teal', 'd2');
-            }
-        }
-        function d2_select(id) { currentToolId = id; d2_viewMode = 'form'; renderApp(); }
-        function d2_back() { d2_viewMode = 'grid'; renderApp(); }
-
-        /* -------------------------------------------------------------------------
-           DESIGN 3: Category Hub
-           ------------------------------------------------------------------------- */
-        function renderDesign3(container) {
-            if (d3_viewMode === 'list') {
-                const categories = ['All', ...new Set(tools.map(t => t.category))];
-                const filteredTools = d3_activeCategory === 'All' ? tools : tools.filter(t => t.category === d3_activeCategory);
-
-                container.innerHTML = `
-                    <div class="max-w-4xl mx-auto w-full space-y-6 animate-fade-in">
-                        <div class="text-center px-4">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Design 3: Category Hub</span>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 mb-2">เลือกเครื่องมือตามหมวดหมู่</h2>
-                            <p class="text-sm text-slate-600 max-w-lg mx-auto">จัดกลุ่มเครื่องมือให้ค้นหาและเข้าถึงง่าย แตะที่แท็บเพื่อกรองผลลัพธ์</p>
-                        </div>
-
-                        <!-- Category Tabs -->
-                        <div class="flex items-center gap-2 overflow-x-auto pb-0 px-2 no-scrollbar border-b border-slate-200">
-                            ${categories.map(cat => `
-                                <button onclick="d3_setCategory('${cat}')" class="px-4 py-3 rounded-t-xl font-bold text-sm whitespace-nowrap transition-all border-b-2 ${d3_activeCategory === cat ? 'text-amber-600 border-amber-600 bg-amber-50/80' : 'text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-50'}">
-                                    ${cat === 'All' ? 'ทั้งหมด (All)' : cat}
-                                </button>
-                            `).join('')}
-                        </div>
-
-                        <!-- Tool Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-2 pb-10">
-                            ${filteredTools.map(t => `
-                                <button onclick="d3_selectTool(${t.id})" class="text-left bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-400 transition-all group cursor-pointer flex flex-col justify-between">
-                                    <div class="flex gap-4">
-                                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl flex-shrink-0 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                                            <i class="fa-solid ${t.icon}"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-amber-700 transition-colors">${t.title}</h3>
-                                            <p class="text-[11px] sm:text-xs text-slate-500 mt-1 line-clamp-2">${t.desc}</p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                        <span>${t.category}</span>
-                                        <i class="fa-solid fa-chevron-right group-hover:text-amber-500 transition-colors"></i>
-                                    </div>
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            } else {
-                const tool = tools.find(t => t.id === currentToolId);
-                container.innerHTML = `
-                    <div class="max-w-3xl mx-auto w-full animate-fade-in">
-                        <button onclick="d3_backToList()" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-amber-600 bg-white px-4 py-2.5 rounded-xl shadow-sm border border-slate-200 transition-colors">
-                            <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าหมวดหมู่
-                        </button>
-                        
-                        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200">
-                            <div class="border-b border-slate-100 pb-5 mb-6 flex items-start gap-4">
-                                <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"><i class="fa-solid ${tool.icon}"></i></div>
-                                <div>
-                                    <span class="inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded uppercase tracking-wider mb-2">${tool.category}</span>
-                                    <h2 class="text-xl font-bold text-slate-900 leading-tight">${tool.title}</h2>
-                                    <p class="text-sm text-slate-500 mt-1">${tool.desc}</p>
-                                </div>
-                            </div>
-                            <div id="form-container-d3"></div>
-                            ${generateResultBox('d3')}
-                        </div>
-                    </div>
-                `;
-                renderFormFields('form-container-d3', tool, 'amber', 'd3');
-            }
-        }
-        function d3_setCategory(cat) { d3_activeCategory = cat; renderApp(); }
-        function d3_selectTool(id) { currentToolId = id; d3_viewMode = 'form'; renderApp(); }
-        function d3_backToList() { d3_viewMode = 'list'; renderApp(); }
-
-        /* -------------------------------------------------------------------------
-           DESIGN 4: Command Palette
-           ------------------------------------------------------------------------- */
-        function renderDesign4(container) {
-            if (d4_viewMode === 'palette') {
-                container.innerHTML = `
-                    <div class="max-w-2xl mx-auto w-full h-full flex flex-col justify-start pt-4 sm:pt-6">
-                        <div class="text-center mb-6">
-                            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Design 4: Command Palette</span>
-                            <h2 class="text-2xl font-bold text-slate-900 mt-2">พิมพ์ค้นหาคำสั่งด่วน</h2>
-                        </div>
-                        <div class="bg-white rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[75vh]">
-                            <!-- Big Search Bar -->
-                            <div class="p-4 sm:p-6 border-b border-slate-100 flex items-center gap-4 bg-slate-50/50">
-                                <i class="fa-solid fa-magnifying-glass text-xl text-indigo-500"></i>
-                                <input type="text" id="cmd-input" oninput="d4_filter(this.value)" placeholder="ค้นหาคำสั่ง... เช่น 'QR', 'ซ่อม', 'หน่วยงาน'" class="w-full bg-transparent text-base sm:text-lg font-medium text-slate-900 outline-none placeholder:text-slate-400">
-                            </div>
-                            
-                            <!-- Filter Chips (shrink-0 with proper breathing room and no clipping) -->
-                            <div class="px-4 py-3 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-slate-100 bg-white flex-shrink-0">
-                                <button onclick="d4_filter('', this)" class="chip-btn active px-4 py-2 bg-slate-900 text-white rounded-full text-xs font-bold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors shadow-xs">ทั้งหมด</button>
-                                <button onclick="d4_filter('Org', this)" class="chip-btn px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs font-semibold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors">🏢 หน่วยงาน</button>
-                                <button onclick="d4_filter('Ticket', this)" class="chip-btn px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs font-semibold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors">🛠️ ซ่อมเคส</button>
-                                <button onclick="d4_filter('Data', this)" class="chip-btn px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs font-semibold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors">📊 ข้อมูล & KPI</button>
-                            </div>
-
-                            <!-- List -->
-                            <div id="cmd-results" class="overflow-y-auto p-2 flex-1 min-h-0">
-                                ${tools.map(t => d4_createRow(t)).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                setTimeout(() => { const inp = document.getElementById('cmd-input'); if(inp) inp.focus(); }, 100);
-            } else {
-                const tool = tools.find(t => t.id === currentToolId);
-                container.innerHTML = `
-                    <div class="max-w-2xl mx-auto w-full animate-pop-in">
-                        <button onclick="d4_back()" class="mb-6 inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 bg-white px-4 py-2.5 rounded-full shadow-sm border border-slate-200 transition">
-                            <i class="fa-solid fa-arrow-left"></i> กลับไปหน้าค้นหา
-                        </button>
-                        <div class="bg-white rounded-[2rem] shadow-xl border border-slate-200 p-6 sm:p-8">
-                            <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
-                                <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl shadow-inner"><i class="fa-solid ${tool.icon}"></i></div>
-                                <div>
-                                    <span class="text-[10px] font-bold text-indigo-500 uppercase">${tool.category}</span>
-                                    <h2 class="text-xl font-bold text-slate-900 leading-tight">${tool.title}</h2>
-                                </div>
-                            </div>
-                            <div id="form-container-d4"></div>
-                            ${generateResultBox('d4')}
-                        </div>
-                    </div>
-                `;
-                renderFormFields('form-container-d4', tool, 'indigo', 'd4');
-            }
-        }
-        function d4_createRow(t) {
-            return `
-                <button onclick="d4_select(${t.id})" class="w-full flex items-center justify-between p-4 hover:bg-indigo-50 rounded-2xl transition-colors group text-left">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-                            <i class="fa-solid ${t.icon}"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-900">${t.title}</p>
-                            <p class="text-xs text-slate-400 mt-0.5 line-clamp-1 pr-4">${t.desc}</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-indigo-500"></i>
-                </button>
-            `;
-        }
-        function d4_filter(q, btnEl) {
-            if (btnEl) {
-                const allChips = document.querySelectorAll('.chip-btn');
-                allChips.forEach(c => {
-                    c.className = "chip-btn px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs font-semibold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors";
-                });
-                btnEl.className = "chip-btn active px-4 py-2 bg-slate-900 text-white rounded-full text-xs font-bold whitespace-nowrap flex-shrink-0 flex items-center justify-center transition-colors shadow-xs";
-            }
-            const list = document.getElementById('cmd-results');
-            if(!list) return;
-            q = q.toLowerCase();
-            const filtered = tools.filter(t => t.title.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.category.toLowerCase().includes(q));
-            list.innerHTML = filtered.length > 0 ? filtered.map(t => d4_createRow(t)).join('') : `<div class="p-8 text-center text-sm text-slate-400">ไม่พบคำสั่งที่ค้นหา</div>`;
-        }
-        function d4_select(id) { currentToolId = id; d4_viewMode = 'form'; renderApp(); }
-        function d4_back() { d4_viewMode = 'palette'; renderApp(); }
-
-        /* -------------------------------------------------------------------------
-           DESIGN 5: Focus Stack Cards (Mobile-Native & Fully Collapsible)
-           ------------------------------------------------------------------------- */
-        let d5_activeCategory = 'All';
-
-        function renderDesign5(container) {
-            const categories = ['All', 'Org Management', 'Ticket Repair', 'Data & Analytics'];
-            const filteredTools = d5_activeCategory === 'All' ? tools : tools.filter(t => t.category === d5_activeCategory);
-
-            container.innerHTML = `
-                <div class="max-w-2xl mx-auto w-full pb-10">
-                    <!-- Compact Header -->
-                    <div class="flex items-center justify-between mb-3 px-2">
-                        <div class="flex items-center gap-2">
-                            <span class="bg-pink-100 text-pink-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Design 5</span>
-                            <h2 class="text-base sm:text-lg font-bold text-slate-900">Focus Stack</h2>
-                        </div>
-                        <span class="text-[11px] text-slate-400 font-medium">แตะการ์ดเพื่อเปิดหรือย่อเก็บ</span>
-                    </div>
-
-                    <!-- Category Filter Tabs -->
-                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-2 mb-3">
-                        ${categories.map(cat => `
-                            <button onclick="d5_setCategory('${cat}')" class="chip-btn px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${d5_activeCategory === cat ? 'bg-pink-600 text-white font-bold shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'}">
-                                ${cat === 'All' ? 'ทั้งหมด' : cat === 'Org Management' ? '🏢 หน่วยงาน' : cat === 'Ticket Repair' ? '🛠️ ซ่อมเคส' : '📊 ข้อมูล'}
-                            </button>
-                        `).join('')}
-                    </div>
-
-                    <div class="space-y-2.5 px-2" id="stack-container">
-                        ${filteredTools.map(t => {
-                            const isOpen = t.id === currentToolId;
-                            return `
-                                <div id="card-${t.id}" class="bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${isOpen ? 'focus-card-active border-pink-500 border-2 shadow-md' : 'focus-card-inactive border-slate-200 hover:border-slate-300 shadow-2xs'}">
-                                    <!-- Single Clean Header Toggle (Flush with top, Zero wasted space) -->
-                                    <button type="button" onclick="d5_toggle(${t.id})" aria-expanded="${isOpen}" class="w-full flex items-center justify-between p-3.5 sm:p-4 text-left cursor-pointer outline-none select-none transition-colors ${isOpen ? 'bg-pink-50/40 border-b border-pink-100' : 'hover:bg-slate-50/80 bg-white'}">
-                                        <div class="flex items-center gap-3 min-w-0 pr-2">
-                                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-base shadow-inner transition-colors flex-shrink-0 ${isOpen ? 'bg-pink-600 text-white' : 'bg-slate-100 text-slate-600'}">
-                                                <i class="fa-solid ${t.icon}"></i>
-                                            </div>
-                                            <div class="min-w-0">
-                                                <div class="flex items-center gap-2">
-                                                    <span class="text-[9px] font-bold text-pink-600 uppercase tracking-widest px-1.5 py-0.5 bg-pink-100/60 rounded">${t.category.split(' ')[0]}</span>
-                                                    ${isOpen ? '<span class="text-[10px] text-pink-700 font-bold">เปิดใช้งานอยู่</span>' : ''}
-                                                </div>
-                                                <h3 class="text-sm font-bold text-slate-900 leading-snug truncate mt-0.5">${t.title}</h3>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center gap-2 flex-shrink-0">
-                                            ${isOpen ? `
-                                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-pink-100 text-pink-700 hover:bg-pink-200 flex items-center gap-1.5 shadow-2xs transition">
-                                                    <i class="fa-solid fa-chevron-up text-[10px]"></i> ย่อเก็บ
-                                                </span>
-                                            ` : `
-                                                <span class="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
-                                                    แตะเพื่อดู <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                                                </span>
-                                            `}
-                                        </div>
-                                    </button>
-                                    
-                                    <!-- Card Body (Expandable) -->
-                                    <div id="card-body-${t.id}" class="transition-all duration-300 px-4 sm:px-5 ${isOpen ? 'max-h-[2500px] pb-5 sm:pb-6 opacity-100' : 'max-h-0 py-0 opacity-0 overflow-hidden'}">
-                                        <div class="pt-3 border-t border-slate-100">
-                                            <div class="flex items-start gap-2 bg-slate-50 p-3 rounded-xl mb-4 text-xs text-slate-600 border border-slate-100 leading-relaxed">
-                                                <i class="fa-solid fa-circle-info text-pink-500 mt-0.5 flex-shrink-0"></i>
-                                                <p>${t.desc}</p>
-                                            </div>
-                                            <div id="form-container-d5-${t.id}"></div>
-                                            ${generateResultBox(`d5-${t.id}`)}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-            const activeTool = tools.find(t => t.id === currentToolId);
-            if(activeTool) renderFormFields(`form-container-d5-${activeTool.id}`, activeTool, 'pink', `d5-${activeTool.id}`);
-        }
-
-        function d5_toggle(id) {
-            // True toggle: if already open, collapse it (set to null)
-            if (currentToolId === id) {
-                currentToolId = null;
-            } else {
-                currentToolId = id;
-            }
-            renderApp();
-            
-            if (currentToolId) {
-                setTimeout(() => {
-                    const el = document.getElementById(`card-${id}`);
-                    if(el) {
-                        const y = el.getBoundingClientRect().top + window.scrollY - 80;
-                        window.scrollTo({top: Math.max(0, y), behavior: 'smooth'});
-                    }
-                }, 80);
-            }
-        }
-
-        function d5_setCategory(cat) {
-            d5_activeCategory = cat;
-            renderApp();
-        }
-
-        /* -------------------------------------------------------------------------
-           Core Form Logic & Realistic Mock Execution
-           ------------------------------------------------------------------------- */
-        function renderFormFields(containerId, tool, themeColor, prefix) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            const ringColors = { slate: 'focus:ring-slate-900', teal: 'focus:ring-teal-500', amber: 'focus:ring-amber-500', indigo: 'focus:ring-indigo-500', pink: 'focus:ring-pink-500' };
-            const bgColors = { slate: 'bg-slate-900 hover:bg-slate-800', teal: 'bg-teal-600 hover:bg-teal-700', amber: 'bg-amber-500 hover:bg-amber-600', indigo: 'bg-indigo-600 hover:bg-indigo-700', pink: 'bg-pink-600 hover:bg-pink-700' };
-            
-            const ringColor = ringColors[themeColor] || ringColors.slate;
-            const bgColor = bgColors[themeColor] || bgColors.slate;
-
-            if (tool.isLink) {
-                container.innerHTML = `
-                    <div class="py-8 text-center space-y-4 bg-slate-50 rounded-2xl border border-slate-100 p-6">
-                        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl mx-auto flex items-center justify-center text-3xl shadow-inner">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                        </div>
-                        <p class="text-sm font-medium text-slate-700">ลิงก์ตรงสู่ระบบ Google Cloud Monitoring Dashboard</p>
-                        <a href="${tool.linkUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 ${bgColor} text-white px-6 py-3.5 rounded-xl font-bold text-sm transition shadow-sm">
-                            <span>เปิดหน้าต่าง Cloud Monitoring</span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            if (tool.fields.length === 0) {
-                const btn = document.createElement('button');
-                btn.className = `w-full ${bgColor} py-3.5 rounded-xl font-bold text-sm text-white transition shadow-sm flex items-center justify-center space-x-2`;
-                btn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>ดำเนินการประมวลผลทันที</span>`;
-                btn.onclick = () => executeAction(tool, {}, prefix);
-                container.appendChild(btn);
-                return;
-            }
-
-            const form = document.createElement('form');
-            form.className = "space-y-4";
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                const formData = {};
-                tool.fields.forEach(f => {
-                    const el = document.getElementById(`f_${prefix}_${f.name}`);
-                    if (el) {
-                        formData[f.name] = f.type === 'checkbox' ? el.checked : el.value;
-                    }
-                });
-                executeAction(tool, formData, prefix);
-            };
-
-            tool.fields.forEach(field => {
-                const group = document.createElement('div');
-                group.className = "space-y-1.5";
-                
-                if (field.type === 'checkbox') {
-                    group.className = "flex items-center space-x-3 py-2";
-                    group.innerHTML = `
-                        <input type="checkbox" id="f_${prefix}_${field.name}" ${field.default ? 'checked' : ''} class="w-5 h-5 text-slate-900 border-slate-300 rounded focus:ring-2 ${ringColor} cursor-pointer">
-                        <label for="f_${prefix}_${field.name}" class="text-sm font-bold text-slate-900 cursor-pointer">${field.label}</label>
-                    `;
-                } else {
-                    let inputHtml = '';
-                    if (field.type === 'select') {
-                        inputHtml = `<select id="f_${prefix}_${field.name}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:border-transparent ${ringColor}">${field.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
-                    } else if (field.type === 'textarea') {
-                        inputHtml = `<textarea id="f_${prefix}_${field.name}" rows="3" placeholder="${field.placeholder || ''}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:border-transparent ${ringColor} font-mono placeholder:text-slate-400"></textarea>`;
+        function filterStatus(stat) {
+            selectedStatus = stat;
+            ['all', 'active', 'prototype', 'legacy'].forEach(s => {
+                const btn = document.getElementById(`stat-${s}`);
+                if (btn) {
+                    if (s === stat) {
+                        btn.className = "stat-btn px-3 py-1.5 rounded-xl bg-slate-900 text-white font-bold whitespace-nowrap";
                     } else {
-                        inputHtml = `<input type="${field.type}" id="f_${prefix}_${field.name}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''} class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:border-transparent ${ringColor} placeholder:text-slate-400">`;
+                        btn.className = "stat-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 whitespace-nowrap";
                     }
-                    group.innerHTML = `<label for="f_${prefix}_${field.name}" class="block text-xs font-bold text-slate-700">${field.label}${field.required ? ' <span class="text-rose-500">*</span>' : ''}</label>${inputHtml}`;
                 }
-                form.appendChild(group);
+            });
+            renderCards();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val;
+            renderCards();
+        }
+
+        function resetFilters() {
+            selectedSystem = 'all';
+            selectedStatus = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            filterSystem('all');
+            filterStatus('all');
+        }
+
+        // View Mode Switcher
+        function setViewMode(mode) {
+            currentView = mode;
+            const gridEl = document.getElementById('cardsGrid');
+            const matrixEl = document.getElementById('timelineMatrix');
+            const btnGrid = document.getElementById('viewModeGrid');
+            const btnMatrix = document.getElementById('viewModeMatrix');
+
+            if (mode === 'grid') {
+                gridEl.classList.remove('hidden');
+                matrixEl.classList.add('hidden');
+                btnGrid.className = "px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
+                btnMatrix.className = "px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+            } else {
+                gridEl.classList.add('hidden');
+                matrixEl.classList.remove('hidden');
+                renderMatrix();
+                btnMatrix.className = "px-3 py-1.5 rounded-xl bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
+                btnGrid.className = "px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+            }
+        }
+
+        // Quick Preview Modal
+        function openPreviewModal(id) {
+            const item = allDesigns.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('modalTitle').innerText = `${item.name} (${item.systemName})`;
+            document.getElementById('modalCategoryBadge').innerText = item.systemName;
+            document.getElementById('modalCategoryBadge').className = `px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${item.systemBadgeColor}`;
+            document.getElementById('modalExternalLink').href = item.url;
+            document.getElementById('previewIframe').src = item.url;
+            
+            setPreviewDevice('desktop');
+            const modal = document.getElementById('previewModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePreviewModal() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('previewIframe').src = '';
+        }
+
+        function setPreviewDevice(device) {
+            const container = document.getElementById('previewFrameContainer');
+            ['desktop', 'tablet', 'mobile'].forEach(d => {
+                const btn = document.getElementById(`dev-${d}`);
+                if (btn) {
+                    if (d === device) {
+                        btn.className = "px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition";
+                    } else {
+                        btn.className = "px-2.5 py-1 rounded-lg hover:text-white transition";
+                    }
+                }
             });
 
-            const submitBtn = document.createElement('button');
-            submitBtn.type = "submit";
-            submitBtn.className = `w-full ${bgColor} text-white py-3.5 rounded-xl font-bold text-sm transition shadow-md flex items-center justify-center space-x-2 mt-6 focus:ring-4 focus:ring-opacity-50 ${ringColor}`;
-            submitBtn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>ดำเนินการประมวลผล</span>`;
-            form.appendChild(submitBtn);
-
-            container.appendChild(form);
+            if (device === 'desktop') {
+                container.style.maxWidth = '100%';
+            } else if (device === 'tablet') {
+                container.style.maxWidth = '768px';
+            } else if (device === 'mobile') {
+                container.style.maxWidth = '390px';
+            }
         }
 
-        function generateResultBox(prefix) {
-            return `
-                <div id="result-box-${prefix}" class="mt-6 hidden animate-slide-up">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-slate-500 flex items-center gap-2 uppercase tracking-wider"><i class="fa-solid fa-terminal text-slate-400"></i> ผลลัพธ์การทำงาน (Console Response)</span>
-                        <button type="button" onclick="copyOutput('${prefix}')" class="text-xs font-semibold text-slate-600 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"><i class="fa-regular fa-copy mr-1"></i> คัดลอก JSON</button>
-                    </div>
-                    <pre id="output-pre-${prefix}" class="bg-slate-900 text-emerald-400 p-4 rounded-2xl text-xs font-mono overflow-x-auto shadow-inner border border-slate-800 leading-relaxed"></pre>
-                </div>
-            `;
+        // Compare Modal
+        function openCompareModal() {
+            const selectLeft = document.getElementById('compareSelectLeft');
+            const selectRight = document.getElementById('compareSelectRight');
+
+            selectLeft.innerHTML = allDesigns.map(d => `<option value="${d.id}">[${d.systemName}] ${d.name}</option>`).join('');
+            selectRight.innerHTML = allDesigns.map(d => `<option value="${d.id}">[${d.systemName}] ${d.name}</option>`).join('');
+
+            // Defaults: Left = staff-1 (legacy), Right = staff-7 (active)
+            selectLeft.value = 'staff-1';
+            selectRight.value = 'staff-7';
+
+            updateCompareViews();
+
+            const modal = document.getElementById('compareModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        function executeAction(tool, data, prefix) {
-            const resBox = document.getElementById(`result-box-${prefix}`);
-            const pre = document.getElementById(`output-pre-${prefix}`);
-            if (!resBox || !pre) return;
+        function closeCompareModal() {
+            const modal = document.getElementById('compareModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('compareIframeLeft').src = '';
+            document.getElementById('compareIframeRight').src = '';
+        }
 
-            resBox.classList.remove('hidden');
-            
-            let mockResponse = {};
-            let successMsg = "ดำเนินการประมวลผลเสร็จสิ้น";
+        function updateCompareViews() {
+            const idLeft = document.getElementById('compareSelectLeft').value;
+            const idRight = document.getElementById('compareSelectRight').value;
 
-            if (tool.id === 1) {
-                const orgId = Math.floor(1000 + Math.random() * 9000);
-                mockResponse = {
-                    status: "success",
-                    action: "create_org",
-                    org_id: orgId,
-                    org_name: data.name || "เทศบาลนครทดสอบ",
-                    province: data.province || "กรุงเทพมหานคร",
-                    claim_codes: {
-                        admin: "ADM-" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-                        staff: "STF-" + Math.random().toString(36).substring(2, 8).toUpperCase()
-                    },
-                    qr_code_url: `https://api.traffy.in.th/qr/org_${orgId}.png`,
-                    message: "สร้างหน่วยงานบัญชีทางการและ QR Code สำเร็จ"
-                };
-                successMsg = `สร้างหน่วยงาน "${data.name || 'ใหม่'}" สำเร็จ!`;
-            } else if (tool.id === 2) {
-                mockResponse = {
-                    status: "success",
-                    action: "check_properties",
-                    query: data.name || data.org_id || "ทั้งหมด",
-                    matched_organizations: [
-                        { org_id: data.org_id || 1042, name: data.name || "เทศบาลทดสอบ", flags: { ai: true, public_map: true, cross_forward: true } }
-                    ]
-                };
-                successMsg = "ดึงข้อมูลและสิทธิ์หน่วยงานสำเร็จ";
-            } else if (tool.id === 3) {
-                mockResponse = {
-                    status: "success",
-                    action: "check_code",
-                    org_id: data.org_id || 1234,
-                    admin_claim_code: "ADM-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-XQ",
-                    staff_claim_code: "STF-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-BY"
-                };
-                successMsg = "เรียกดูรหัส Claim Code สำเร็จ";
-            } else if (tool.id === 4) {
-                mockResponse = {
-                    status: "success",
-                    action: "update_qr",
-                    org_id: data.org_id || 1234,
-                    new_qr_url: "https://api.traffy.in.th/storage/qr/updated_" + Date.now() + ".png"
-                };
-                successMsg = "อัปเดต QR Code ประจำหน่วยงานสำเร็จ";
-            } else if (tool.id === 5) {
-                mockResponse = {
-                    status: "success",
-                    action: "create_hierarchy",
-                    hierarchy_tag: data.tag || "{bfmcc}",
-                    paths_added: data.pathlist ? data.pathlist.split('\n') : ["1", "1.2"]
-                };
-                successMsg = "สร้างผังองค์กรแม่-ลูกสำเร็จ";
-            } else if (tool.id === 6) {
-                mockResponse = {
-                    status: "success",
-                    action: "update_message_state_fi",
-                    ticket_id: data.ticket_id || "2026-XXXXXX",
-                    new_state: data.state_type || "เสร็จสิ้น"
-                };
-                successMsg = `ซ่อมเคส ${data.ticket_id || ''} สำเร็จ`;
-            } else if (tool.id === 7) {
-                mockResponse = {
-                    status: "success",
-                    action: "view_message_timeline",
-                    ticket_id: data.ticket_id || "2026-XXXXXX",
-                    timeline: [
-                        { state: "start", time: "2026-10-15T08:30:00Z", actor: "Citizen", action: "Reported problem" },
-                        { state: "inprogress", time: "2026-10-15T09:15:00Z", actor: "Staff_01", action: "Accepted ticket" }
-                    ]
-                };
-                successMsg = "ดึงรายละเอียดเคสสำเร็จ";
-            } else if (tool.id === 8) {
-                mockResponse = {
-                    status: "success",
-                    action: "csv_export",
-                    total_rows: Math.floor(Math.random() * 50000) + 10000,
-                    download_url: "https://api.traffy.in.th/exports/tickets_" + Date.now() + ".csv"
-                };
-                successMsg = "สร้างไฟล์ CSV พร้อมดาวน์โหลด";
-            } else if (tool.id === 9) {
-                mockResponse = {
-                    status: "success",
-                    action: "bkk_assessment",
-                    format: data.output || "json",
-                    districts_processed: 50,
-                    average_score: (Math.random() * 10 + 85).toFixed(2) + "%"
-                };
-                successMsg = "คำนวณคะแนนประเมิน กทม. สำเร็จ";
-            } else if (tool.id === 11) {
-                mockResponse = {
-                    status: "success",
-                    action: "state_config",
-                    org_id: data.org_id || 1234,
-                    custom_statuses: ["รออะไหล่", "นัดหมายลงพื้นที่"]
-                };
-                successMsg = "ตั้งค่า State Config สำเร็จ";
-            } else {
-                mockResponse = { status: "success", tool_id: tool.id, action: tool.title, input_data: data };
+            const itemLeft = allDesigns.find(d => d.id === idLeft);
+            const itemRight = allDesigns.find(d => d.id === idRight);
+
+            if (itemLeft) {
+                document.getElementById('compareLabelLeft').innerText = `${itemLeft.systemName} - ${itemLeft.name}`;
+                document.getElementById('compareLinkLeft').href = itemLeft.url;
+                document.getElementById('compareIframeLeft').src = itemLeft.url;
             }
 
-            mockResponse.timestamp = new Date().toISOString();
-            
-            pre.innerText = JSON.stringify(mockResponse, null, 2);
-            showToast(successMsg);
-
-            setTimeout(() => {
-                resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+            if (itemRight) {
+                document.getElementById('compareLabelRight').innerText = `${itemRight.systemName} - ${itemRight.name}`;
+                document.getElementById('compareLinkRight').href = itemRight.url;
+                document.getElementById('compareIframeRight').src = itemRight.url;
+            }
         }
 
-        function copyOutput(prefix) {
-            const preEl = document.getElementById(`output-pre-${prefix}`);
-            if (!preEl) return;
-            const text = preEl.innerText;
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            showToast("คัดลอกผลลัพธ์ลงคลิปบอร์ดแล้ว");
-        }
+        // Close modal on Escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePreviewModal();
+                closeCompareModal();
+            }
+        });
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = message;
-            toast.classList.remove('translate-y-32', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-32', 'opacity-0');
-            }, 3000);
-        }
-
+        // Initialize on load
         window.onload = () => {
-            renderApp();
+            renderCards();
+            lucide.createIcons();
         };
     </script>
 </body>
